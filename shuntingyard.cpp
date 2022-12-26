@@ -4,11 +4,9 @@
 
 #include "tokenizer.cpp"
 
-
-
 int main() {
     std::string input("1+23-3*4");
-    std::queue<TokenType> q;
+    std::queue<Token> q;
 
     while (!input.empty()) {
         q.push(read(input));

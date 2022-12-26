@@ -8,43 +8,69 @@ enum class TokenType {
     MOD, ERROR
 };
 
+class Token {
+    public:
+    TokenType type;
+
+    void setType(TokenType t) {
+        type = t;
+    }
+};
+
+class NumToken : public Token {
+    public:
+    int num;
+
+    void setNum(int n) {
+        num = n;
+    }
+
+    NumToken() {
+        setType(TokenType::NUM);
+    }
+ };
+
 // returns token if only a single character
 // was needed. returns the error token
 // otherwise
 
-TokenType read(std::string& input) {
-    TokenType token = TokenType::ERROR;
+Token read(std::string& input) {
+    Token token;
+    token.setType(TokenType::ERROR);
 
     switch(input.front()) {
         case '+':
-            token = TokenType::ADD;
+            token.setType(TokenType::ADD);
             break;
         case '-':
-            token = TokenType::SUB;
+            token.setType(TokenType::SUB);
             break;
         case '*':
-            token = TokenType::MUL;
+            token.setType(TokenType::MUL);
             break;
         case '/':
-            token = TokenType::DIV;
+            token.setType(TokenType::DIV);
             break;
         case '^':
-            token = TokenType::EXP;
+            token.setType(TokenType::EXP);
             break;
         case '%':
-            token = TokenType::MOD;
+            token.setType(TokenType::MOD);
             break;
     }
-    if (token != TokenType::ERROR) input.erase(0, 1);
+    if (token.type != TokenType::ERROR) input.erase(0, 1);
     
     else {
         std::string t;
         while (isdigit(input.front())) {
             t.append(1, input.front());
+            input.erase(0, 1);
         }
-        int x = std::stoi(t);
-        token = // TODO stop using enum so number is accounted for
-    }
+        if (t == "") return token;
 
-    return token;
+        int x = std::stoi(t);
+        NumToken numToken;
+        numToken.setNum(x);
+        return numToken;
+    }
 }
