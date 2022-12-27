@@ -17,8 +17,8 @@ enum class TokenType {
 // Token representations in string form
 // NUM and ERROR have placeholder values
 static const std::string tokens[] = {
-    "+", "-", "*", "/", "^", "%", 
-    "(", ")", "n", "e"
+    "+", "-", "*", "/", "^", "%", "(", ")",
+    "n", "e"
 };
 
 // Token class that describes a single token
@@ -51,55 +51,41 @@ class NumToken : public Token {
 // while removing its characters. If no match
 // is found, the error token is returned.
 // Whitespace is removed when finding tokens
-Token read(std::string& input) {
+Token read(std::string& input, bool lastWasRBOrNum) {
     Token token;
+    token.setType(TokenType::ERROR);
 
-    // TODO fix the switch
-    switch(input.front()) {
-        case '+':
-            token.setType(TokenType::ADD);
-            break;
-        case '-':
-            token.setType(TokenType::SUB);
-            break;
-        case '*':
-            token.setType(TokenType::MUL);
-            break;
-        case '/':
-            token.setType(TokenType::DIV);
-            break;
-        case '^':
-            token.setType(TokenType::EXP);
-            break;
-        case '%':
-            token.setType(TokenType::MOD);
-            break;
-        case '(':
-            token.setType(TokenType::LB);
-            break;
-        case ')':
-            token.setType(TokenType::RB);
-            break;
-        default:
-            token.setType(TokenType::ERROR);
-            break;
-    }
-    if (token.type != TokenType::ERROR) {
-        input.erase(0, 1);
-        return token;
-    }
-    else {
-        std::string t;
-        while (isdigit(input.front())) {
-            t.append(1, input.front());
+    while(isspace(input.front())) input.erase(0, 1);
+
+    // checks through all 1-char tokens
+    bool negValue = false;
+    for (int i = 0; i < 8; i++) {
+        if (input.front() == tokens[i].front()) {
+
+            // accounts for unary negative op
+            if (i == 1 && !lastWasRBOrNum) {
+                negValue = true;
+                input.erase(0, 1);
+                break;
+            }
+
+            token.setType((TokenType) i);
             input.erase(0, 1);
+            return token;
         }
-        if (t == "") return token;
-
-        NumToken numToken;
-        numToken.setNum(t);
-        return numToken;
     }
+
+    std::string t;
+    while (isdigit(input.front())) {
+        t.append(1, input.front());
+        input.erase(0, 1);
+    }
+    if (t == "") return token;
+
+    if (negValue) t.insert(0, "-");
+    NumToken numToken;
+    numToken.setNum(t);
+    return numToken;
 }
 
 #endif
