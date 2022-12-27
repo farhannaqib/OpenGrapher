@@ -5,7 +5,7 @@
 #include "tokenizer.cpp"
 
 int main() {
-    std::string input("1+23-3*4");
+    std::string input("1+2-3/4");
     std::queue<Token> q;
 
     while (!input.empty()) {
@@ -13,8 +13,8 @@ int main() {
     }
 
     while (!q.empty()) {
-        // std::cout << q.front() << std::endl;
-        // q.pop();
+        std::cout << q.front().data << std::endl;
+        q.pop();
     }
 
     // whitespace shld be ignored

@@ -1,34 +1,45 @@
+#ifndef TOKENIZER_
+#define TOKENIZER_
+
 #include <vector>
+#include <iostream>
 #include <string>
 
 enum class TokenType {
     ADD, SUB,
     MUL, DIV,
-    NUM, EXP,
-    MOD, ERROR
+    EXP, MOD, 
+    NUM, ERROR
+};
+static const std::string tokens[] = {
+    "+", "-", "*", "/", "^", "%", 
+    "n", "e"
 };
 
 class Token {
     public:
     TokenType type;
+    std::string data;
 
     void setType(TokenType t) {
         type = t;
+        data = tokens[(int)t];
     }
+
+    ~Token() {}
 };
 
 class NumToken : public Token {
     public:
-    int num;
 
-    void setNum(int n) {
-        num = n;
+    void setNum(std::string n) {
+        data = n;
     }
 
     NumToken() {
         setType(TokenType::NUM);
     }
- };
+};
 
 // returns token if only a single character
 // was needed. returns the error token
@@ -36,7 +47,6 @@ class NumToken : public Token {
 
 Token read(std::string& input) {
     Token token;
-    token.setType(TokenType::ERROR);
 
     switch(input.front()) {
         case '+':
@@ -57,9 +67,14 @@ Token read(std::string& input) {
         case '%':
             token.setType(TokenType::MOD);
             break;
+        default:
+            token.setType(TokenType::ERROR);
+            break;
     }
-    if (token.type != TokenType::ERROR) input.erase(0, 1);
-    
+    if (token.type != TokenType::ERROR) {
+        input.erase(0, 1);
+        return token;
+    }
     else {
         std::string t;
         while (isdigit(input.front())) {
@@ -68,9 +83,10 @@ Token read(std::string& input) {
         }
         if (t == "") return token;
 
-        int x = std::stoi(t);
         NumToken numToken;
-        numToken.setNum(x);
+        numToken.setNum(t);
         return numToken;
     }
 }
+
+#endif
