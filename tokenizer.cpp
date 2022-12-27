@@ -9,16 +9,20 @@
 enum class TokenType {
     ADD, SUB,
     MUL, DIV,
-    EXP, MOD, 
+    POW, MOD, 
     LB, RB,
     NUM, ERROR
 }; 
 
-// Token representations in string form
-// NUM and ERROR have placeholder values
-static const std::string tokens[] = {
-    "+", "-", "*", "/", "^", "%", "(", ")",
-    "n", "e"
+static const struct TokenValues {
+    std::string string;
+    int precedence;
+} tokens[] = {
+    {"+", 1}, {"-", 1},
+    {"*", 2}, {"/", 2},
+    {"^", 3}, {"%", 2},
+    {"(", 0}, {")", 0},
+    {"NUMBER", 0}, {"ERROR", 0}
 };
 
 // Token class that describes a single token
@@ -30,7 +34,7 @@ class Token {
 
     void setType(TokenType t) {
         type = t;
-        data = tokens[(int)t];
+        data = tokens[(int)t].string;
     }
 };
 
@@ -60,7 +64,7 @@ Token read(std::string& input, bool lastWasRBOrNum) {
     // checks through all 1-char tokens
     bool negValue = false;
     for (int i = 0; i < 8; i++) {
-        if (input.front() == tokens[i].front()) {
+        if (input.front() == tokens[i].string.front()) {
 
             // accounts for unary negative op
             if (i == 1 && !lastWasRBOrNum) {
@@ -73,7 +77,9 @@ Token read(std::string& input, bool lastWasRBOrNum) {
             input.erase(0, 1);
             return token;
         }
-    }
+    } // TODO parsing through | is gonna be a bitch
+
+    // TODO functions
 
     std::string t;
     while (isdigit(input.front())) {
