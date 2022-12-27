@@ -3,10 +3,10 @@
 #include <queue>
 #include <stack>
 
-#include "tokenizer.cpp"
+#include "tokenizer.h"
 
 int main() {
-    std::string input("3+4*(2-1)");
+    std::string input("3+4*ABS(2-1)");
     std::queue<Token> q;
 
     while (!input.empty()) {
@@ -17,6 +17,11 @@ int main() {
         else q.push(read(input, false));
     }
 
+    // TODO list:
+    // account for |
+    // account for )X, X(, nx, and xn
+    // change from RPN to AST
+
     std::queue<Token> output;
     std::stack<Token> opstack;
 
@@ -25,7 +30,8 @@ int main() {
         //std::cout << tokens[(int)token.type].string;
         q.pop();
 
-        if (token.type == TokenType::NUM) output.push(token);
+        if (token.type == TokenType::NUM || 
+        token.type == TokenType::VAR) output.push(token);
         else if (token.type == TokenType::LB) opstack.push(token);
         else if (token.type == TokenType::RB) {
             while (opstack.top().type != TokenType::LB) {
@@ -49,7 +55,9 @@ int main() {
             }
             opstack.push(token);
         }
-        // functions
+        else if ((int) token.type < 18) {
+            opstack.push(token);
+        }
     }
 
     while (!opstack.empty()) {
