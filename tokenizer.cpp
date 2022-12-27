@@ -5,17 +5,24 @@
 #include <iostream>
 #include <string>
 
+// Token representations
 enum class TokenType {
     ADD, SUB,
     MUL, DIV,
     EXP, MOD, 
+    LB, RB,
     NUM, ERROR
-};
+}; 
+
+// Token representations in string form
+// NUM and ERROR have placeholder values
 static const std::string tokens[] = {
     "+", "-", "*", "/", "^", "%", 
-    "n", "e"
+    "(", ")", "n", "e"
 };
 
+// Token class that describes a single token
+// with its type and data
 class Token {
     public:
     TokenType type;
@@ -25,10 +32,9 @@ class Token {
         type = t;
         data = tokens[(int)t];
     }
-
-    ~Token() {}
 };
 
+// Number token that stores its number
 class NumToken : public Token {
     public:
 
@@ -41,13 +47,14 @@ class NumToken : public Token {
     }
 };
 
-// returns token if only a single character
-// was needed. returns the error token
-// otherwise
-
+// Reads and returns the token at the front
+// while removing its characters. If no match
+// is found, the error token is returned.
+// Whitespace is removed when finding tokens
 Token read(std::string& input) {
     Token token;
 
+    // TODO fix the switch
     switch(input.front()) {
         case '+':
             token.setType(TokenType::ADD);
@@ -66,6 +73,12 @@ Token read(std::string& input) {
             break;
         case '%':
             token.setType(TokenType::MOD);
+            break;
+        case '(':
+            token.setType(TokenType::LB);
+            break;
+        case ')':
+            token.setType(TokenType::RB);
             break;
         default:
             token.setType(TokenType::ERROR);
