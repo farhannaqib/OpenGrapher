@@ -13,6 +13,8 @@ enum class TokenType {
     CSC, SEC, COT,
     SQRT, ABS,
     FLOOR, CIEL,
+    LN, LOG,
+    MAX, MIN,
     VAR,
     NUM, ERROR
 }; 
@@ -29,8 +31,18 @@ static const struct TokenValues {
     {"CSC", 0}, {"SEC", 0}, {"COT", 0},
     {"SQRT", 0}, {"ABS", 0},
     {"FLOOR", 0}, {"CIEL", 0},
+    {"LN", 0}, {"LOG", 0},
+    {"MAX", 0}, {"MIN", 0},
     {"x", 0},
     {"number", 0}, {"error", 0}
+};
+
+static const struct ConstantValues {
+    std::string string;
+    double value;
+} constants[] = {
+    {"PI", 3.14159265358979323846},
+    {"E", 2.71828182845904523536}
 };
 
 // Token class that describes a single token

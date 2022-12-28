@@ -4,9 +4,27 @@
 #include <stack>
 
 #include "tokenizer.h"
+#include "ast.h"
 
 int main() {
-    std::string input("3+4*ABS(2-1)");
+    std::string inputs[] {
+        "1+2", "1+2*3", "1+2*3-4",
+        "1^2", "0+1^2", "E+1"
+    };
+    
+    for (std::string input : inputs){
+        std::queue<Token> output = RPN(input);
+        while (!output.empty()) {
+            std::cout << output.front().data << " ";
+            output.pop();
+        }
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
+
+std::queue<Token> RPN(std::string input) {
     std::queue<Token> q;
 
     while (!input.empty()) {
@@ -27,7 +45,6 @@ int main() {
 
     while (!q.empty()) {
         Token token = q.front();
-        //std::cout << tokens[(int)token.type].string;
         q.pop();
 
         if (token.type == TokenType::NUM || 
@@ -55,20 +72,16 @@ int main() {
             }
             opstack.push(token);
         }
-        else if ((int) token.type < 18) {
+        else if (token.type != TokenType::ERROR) {
             opstack.push(token);
         }
+        else return std::queue<Token>();
     }
 
     while (!opstack.empty()) {
         output.push(opstack.top());
         opstack.pop();
     }
-    
-    while (!output.empty()) {
-        std::cout << output.front().data << std::endl;
-        output.pop();
-    }
 
-    return 0;
+    return output;
 }
