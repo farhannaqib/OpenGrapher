@@ -9,12 +9,12 @@ enum class TokenType {
     MUL, DIV,
     POW, MOD, 
     LB, RB,
+    MAX, MIN,
+    LOG, LN,
     SIN, COS, TAN, 
     CSC, SEC, COT,
     SQRT, ABS,
     FLOOR, CIEL,
-    LN, LOG,
-    MAX, MIN,
     VAR,
     NUM, ERROR
 }; 
@@ -27,12 +27,12 @@ static const struct TokenValues {
     {"*", 2}, {"/", 2},
     {"^", 3}, {"%", 2},
     {"(", 0}, {")", 0},
+    {"MAX", 0}, {"MIN", 0},
+    {"LOG", 0}, {"LN", 0},
     {"SIN", 0}, {"COS", 0}, {"TAN", 0},
     {"CSC", 0}, {"SEC", 0}, {"COT", 0},
     {"SQRT", 0}, {"ABS", 0},
     {"FLOOR", 0}, {"CIEL", 0},
-    {"LN", 0}, {"LOG", 0},
-    {"MAX", 0}, {"MIN", 0},
     {"x", 0},
     {"number", 0}, {"error", 0}
 };
