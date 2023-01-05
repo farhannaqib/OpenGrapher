@@ -21,7 +21,8 @@ ASTNode* stringtoAST(std::string input);
 std::string ASTtoString(ASTNode* node) {
     if (!node) return "";
     if (node->token.type == TokenType::ERROR) return node->token.data;
-    return ASTtoString(node->leftChild).append(node->token.data)
+    // TODO switch back below
+    return ASTtoString(node->leftChild).append(" ").append(node->token.data).append(" ")
     .append(ASTtoString(node->rightChild));
 }
 

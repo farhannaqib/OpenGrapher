@@ -78,9 +78,8 @@ class ErrorToken : public Token {
 
 // Reads and returns a queue of tokens
 // corresponding with the input. If no match
-// is found, the error token is returned.
-// Any set of characters that doesn't directly
-// match with the look up table is an error token.
+// is found, a queue with only the error token
+// is returned.
 // Whitespace is removed when finding tokens
 std::queue<Token> readString(std::string input);
 

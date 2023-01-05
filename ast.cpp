@@ -9,7 +9,9 @@
 int main() {
     std::string inputs[] {
         "1+2", "1+2*3", "1+2*3-4",
-        "1^2", "0+1^2", "E+1", "1+s"
+        "1^2", "0+1^2", "E+1", "1+s",
+        "1--2", "1--(2)", "1+-2", "1-+2",
+        "-1"
     };
     
     for (std::string input : inputs){
@@ -20,6 +22,8 @@ int main() {
     return 0;
 }
 
+// helper method that adds node by removing 
+// from the nodestack when it can
 void addNode(std::stack<ASTNode*> &nodestack, Token token) {
     ASTNode* newNode = new ASTNode();
     int size = nodestack.size();
@@ -40,9 +44,7 @@ void addNode(std::stack<ASTNode*> &nodestack, Token token) {
 ASTNode* stringtoAST(std::string input) {
     std::queue<Token> q = readString(input);
 
-    // TODO list:
-    // account for |
-    // account for )X, X(, nx, and xn
+    // shunting yard algorithm below
 
     std::stack<ASTNode*> nodestack;
     std::stack<Token> opstack;

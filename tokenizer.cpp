@@ -7,24 +7,16 @@
 
 // reads a single Token character and 
 // removes it from the input
-Token read(std::string& input, bool lastWasRBOrNum) {
+Token read(std::string& input) {
     Token token;
     token.setType(TokenType::ERROR);
 
     while(isspace(input.front())) input.erase(0, 1);
 
     // checks through all tokens
-    bool negValue = false;
     for (int i = 0; i < 23; i++) {
         unsigned int len = tokens[i].string.length();
         if (input.substr(0, len) == tokens[i].string) {
-
-            // accounts for unary negative op
-            if (i == 1 && !lastWasRBOrNum) {
-                negValue = true;
-                input.erase(0, len);
-                break;
-            }
 
             token.setType((TokenType) i);
             input.erase(0, len);
@@ -57,9 +49,15 @@ Token read(std::string& input, bool lastWasRBOrNum) {
     }
     if (t == "" || t == ".") return ErrorToken(); // error token
 
-    if (negValue) t.insert(0, "-");
     NumToken numToken = NumToken(t);
     return numToken;
+}
+
+// updates an addop token
+// precondition: second token is also an addop
+void updateAddOp(Token &first, Token second) {
+    if (first.type == second.type) first.setType(TokenType::ADD);
+    else first.setType(TokenType::SUB);
 }
 
 std::queue<Token> readString(std::string input) {
@@ -67,16 +65,25 @@ std::queue<Token> readString(std::string input) {
 
     while (!input.empty()) {
         // read token
-        if (!q.empty() && (q.back().type == TokenType::RB 
-        || q.back().type == TokenType::NUM)) 
-        q.push(read(input, true));
-        else q.push(read(input, false));
+        Token t = read(input);
 
-        if (q.back().type == TokenType::ERROR) {
+        // deals with [+-] [+-]
+        if ((int)t.type <= 2 && (q.size() != 0 
+        && (int) q.back().type <= 2)) {
+            updateAddOp(q.back(), t);
+            continue; // consumes second token
+        }
+
+        // deals with ![(Xn] [+-]
+        // TODO
+
+        if (t.type == TokenType::ERROR) {
             q = std::queue<Token>();
             q.push(ErrorToken());
-            break;
+            return q;
         }
+
+        q.push(t);
     }
 
     return q;
