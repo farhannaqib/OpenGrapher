@@ -4,9 +4,9 @@
 
 #include "tokenizer.h"
 
-Token read(std::string& input, bool lastWasRBOrNum) {
-    Token token;
-    token.setType(TokenType::ERROR);
+Token* read(std::string& input, bool lastWasRBOrNum) {
+    Token* token = new Token();
+    token->setType(TokenType::ERROR);
 
     while(isspace(input.front())) input.erase(0, 1);
 
@@ -23,7 +23,7 @@ Token read(std::string& input, bool lastWasRBOrNum) {
                 break;
             }
 
-            token.setType((TokenType) i);
+            token->setType((TokenType) i);
             input.erase(0, len);
             return token;
         }
@@ -33,8 +33,8 @@ Token read(std::string& input, bool lastWasRBOrNum) {
     for (int i = 0; i < 2; i++) {
         unsigned int len = constants[i].string.length();
         if (input.substr(0, len) == constants[i].string) {
-            NumToken numToken;
-            numToken.setNum(constants[i].string);
+            NumToken* numToken = new NumToken();
+            numToken->setNum(constants[i].string);
             input.erase(0, len);
             return numToken;
         }
@@ -56,7 +56,7 @@ Token read(std::string& input, bool lastWasRBOrNum) {
     if (t == "") return token; // error token
 
     if (negValue) t.insert(0, "-");
-    NumToken numToken;
-    numToken.setNum(t);
+    NumToken* numToken = new NumToken();
+    numToken->setNum(t);
     return numToken;
 }

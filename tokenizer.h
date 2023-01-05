@@ -77,6 +77,6 @@ class NumToken : public Token {
 // Any set of characters that doesn't directly
 // match with the look up table is an error token.
 // Whitespace is removed when finding tokens
-Token read(std::string& input, bool lastWasRBOrNum);
+Token* read(std::string& input, bool lastWasRBOrNum);
 
 #endif
