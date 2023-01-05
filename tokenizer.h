@@ -71,6 +71,14 @@ class NumToken : public Token {
     }
 };
 
+class ErrorToken : public Token {
+    public: 
+
+    ErrorToken() {
+        setType(TokenType::NUM);
+    }
+};
+
 // Reads and returns the token at the front
 // while removing its characters. If no match
 // is found, the error token is returned.

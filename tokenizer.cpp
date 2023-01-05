@@ -53,7 +53,7 @@ Token* read(std::string& input, bool lastWasRBOrNum) {
             } else return token;
         }
     }
-    if (t == "") return token; // error token
+    if (t == "") return new ErrorToken(); // error token
 
     if (negValue) t.insert(0, "-");
     NumToken* numToken = new NumToken();

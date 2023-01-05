@@ -13,8 +13,8 @@ int main() {
     };
     
     for (std::string input : inputs){
-        ASTNode* output = AST(input);
-        std::cout << toString(output) << std::endl;
+        ASTNode* output = ASTMaker(input);
+        std::cout << ASTtoString(output) << std::endl;
     }
 
     return 0;
@@ -37,7 +37,7 @@ void addNode(std::stack<ASTNode*>* nodestack, Token* token) {
     nodestack->push(newNode);
 };
 
-ASTNode* AST(std::string input) {
+ASTNode* stringtoAST(std::string input) {
     std::queue<Token*> q;
 
     while (!input.empty()) {
@@ -51,7 +51,6 @@ ASTNode* AST(std::string input) {
     // TODO list:
     // account for |
     // account for )X, X(, nx, and xn
-    // change from RPN to AST
 
     std::stack<ASTNode*> nodestack;
     std::stack<Token*> opstack;
@@ -94,9 +93,7 @@ ASTNode* AST(std::string input) {
         }
         else {
             ASTNode* errorNode = new ASTNode();
-            Token* errorToken = new Token();
-            errorToken->setType(TokenType::ERROR);
-            errorNode->token = errorToken;
+            errorNode->token = new ErrorToken();
             return errorNode;
         }
     }

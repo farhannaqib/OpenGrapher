@@ -7,18 +7,21 @@
 
 #include "tokenizer.h"
 
+// Node for the AST, holds child node and token info
 struct ASTNode {
     Token* token;
     ASTNode* leftChild;
     ASTNode* rightChild;
 };
 
-ASTNode* AST(std::string input);
+// AST generator given an input
+ASTNode* stringtoAST(std::string input);
 
-std::string toString(ASTNode* node) {
+// returns equivalent string to the AST
+std::string ASTtoString(ASTNode* node) {
     if (!node) return "";
-    return toString(node->leftChild).append(node->token->data)
-    .append(toString(node->rightChild));
+    return ASTtoString(node->leftChild).append(node->token->data)
+    .append(ASTtoString(node->rightChild));
 }
 
 #endif
