@@ -13,14 +13,14 @@ int main() {
     };
     
     for (std::string input : inputs){
-        ASTNode* output = ASTMaker(input);
+        ASTNode* output = stringtoAST(input);
         std::cout << ASTtoString(output) << std::endl;
     }
 
     return 0;
 }
 
-void addNode(std::stack<ASTNode*>* nodestack, Token* token) {
+void addNode(std::stack<ASTNode*>* nodestack, Token token) {
     ASTNode* newNode = new ASTNode();
     int size = nodestack->size();
     if (size >= 0) {
@@ -38,48 +38,40 @@ void addNode(std::stack<ASTNode*>* nodestack, Token* token) {
 };
 
 ASTNode* stringtoAST(std::string input) {
-    std::queue<Token*> q;
-
-    while (!input.empty()) {
-        // read token
-        if (!q.empty() && (q.back()->type == TokenType::RB 
-        || q.back()->type == TokenType::NUM)) 
-        q.push(read(input, true));
-        else q.push(read(input, false));
-    }
+    std::queue<Token> q = readString(input);
 
     // TODO list:
     // account for |
     // account for )X, X(, nx, and xn
 
     std::stack<ASTNode*> nodestack;
-    std::stack<Token*> opstack;
+    std::stack<Token> opstack;
 
     while (!q.empty()) {
-        Token* token = q.front();
+        Token token = q.front();
         q.pop();
 
-        if (token->type == TokenType::NUM || 
-        token->type == TokenType::VAR) {
+        if (token.type == TokenType::NUM || 
+        token.type == TokenType::VAR) {
             ASTNode* num = new ASTNode();
             num->token = token;
             nodestack.push(num);
         }
-        else if (token->type == TokenType::LB) opstack.push(token);
-        else if (token->type == TokenType::RB) {
-            while (opstack.top()->type != TokenType::LB) {
+        else if (token.type == TokenType::LB) opstack.push(token);
+        else if (token.type == TokenType::RB) {
+            while (opstack.top().type != TokenType::LB) {
                 addNode(&nodestack, opstack.top());
                 opstack.pop();
             }
             opstack.pop();
         }
-        else if ((int) token->type < 6) {
+        else if ((int) token.type < 6) {
             if (!opstack.empty()) {
-                Token* topOp = opstack.top();
-                int opPrec = tokens[(int)topOp->type].precedence;
-                int curPrec = tokens[(int)token->type].precedence;
-                while (topOp->type != TokenType::LB && (opPrec > curPrec 
-                || (opPrec == curPrec && token->type != TokenType::POW))) {
+                Token topOp = opstack.top();
+                int opPrec = tokens[(int)topOp.type].precedence;
+                int curPrec = tokens[(int)token.type].precedence;
+                while (topOp.type != TokenType::LB && (opPrec > curPrec 
+                || (opPrec == curPrec && token.type != TokenType::POW))) {
                     addNode(&nodestack, opstack.top());
                     opstack.pop();
                     if (opstack.empty()) break;
@@ -88,12 +80,12 @@ ASTNode* stringtoAST(std::string input) {
             }
             opstack.push(token);
         }
-        else if (token->type != TokenType::ERROR) {
+        else if (token.type != TokenType::ERROR) {
             opstack.push(token);
         }
         else {
             ASTNode* errorNode = new ASTNode();
-            errorNode->token = new ErrorToken();
+            errorNode->token = ErrorToken();
             return errorNode;
         }
     }

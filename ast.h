@@ -9,7 +9,7 @@
 
 // Node for the AST, holds child node and token info
 struct ASTNode {
-    Token* token;
+    Token token;
     ASTNode* leftChild;
     ASTNode* rightChild;
 };
@@ -20,7 +20,7 @@ ASTNode* stringtoAST(std::string input);
 // returns equivalent string to the AST
 std::string ASTtoString(ASTNode* node) {
     if (!node) return "";
-    return ASTtoString(node->leftChild).append(node->token->data)
+    return ASTtoString(node->leftChild).append(node->token.data)
     .append(ASTtoString(node->rightChild));
 }
 

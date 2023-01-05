@@ -79,12 +79,12 @@ class ErrorToken : public Token {
     }
 };
 
-// Reads and returns the token at the front
-// while removing its characters. If no match
+// Reads and returns a queue of tokens
+// corresponding with the input. If no match
 // is found, the error token is returned.
 // Any set of characters that doesn't directly
 // match with the look up table is an error token.
 // Whitespace is removed when finding tokens
-Token* read(std::string& input, bool lastWasRBOrNum);
+std::queue<Token> readString(std::string input);
 
 #endif

@@ -1,12 +1,15 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <queue>
 
 #include "tokenizer.h"
 
-Token* read(std::string& input, bool lastWasRBOrNum) {
-    Token* token = new Token();
-    token->setType(TokenType::ERROR);
+// reads a single Token character and 
+// removes it from the input
+Token read(std::string& input, bool lastWasRBOrNum) {
+    Token token;
+    token.setType(TokenType::ERROR);
 
     while(isspace(input.front())) input.erase(0, 1);
 
@@ -23,7 +26,7 @@ Token* read(std::string& input, bool lastWasRBOrNum) {
                 break;
             }
 
-            token->setType((TokenType) i);
+            token.setType((TokenType) i);
             input.erase(0, len);
             return token;
         }
@@ -33,8 +36,8 @@ Token* read(std::string& input, bool lastWasRBOrNum) {
     for (int i = 0; i < 2; i++) {
         unsigned int len = constants[i].string.length();
         if (input.substr(0, len) == constants[i].string) {
-            NumToken* numToken = new NumToken();
-            numToken->setNum(constants[i].string);
+            NumToken numToken;
+            numToken.setNum(constants[i].string);
             input.erase(0, len);
             return numToken;
         }
@@ -53,10 +56,24 @@ Token* read(std::string& input, bool lastWasRBOrNum) {
             } else return token;
         }
     }
-    if (t == "") return new ErrorToken(); // error token
+    if (t == "") return ErrorToken(); // error token
 
     if (negValue) t.insert(0, "-");
-    NumToken* numToken = new NumToken();
-    numToken->setNum(t);
+    NumToken numToken;
+    numToken.setNum(t);
     return numToken;
+}
+
+std::queue<Token> readString(std::string input) {
+    std::queue<Token> q;
+
+    while (!input.empty()) {
+        // read token
+        if (!q.empty() && (q.back().type == TokenType::RB 
+        || q.back().type == TokenType::NUM)) 
+        q.push(read(input, true));
+        else q.push(read(input, false));
+    }
+
+    return q;
 }
