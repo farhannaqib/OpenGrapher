@@ -62,12 +62,9 @@ class Token {
 class NumToken : public Token {
     public:
 
-    void setNum(std::string n) {
-        data = n;
-    }
-
-    NumToken() {
+    NumToken(std::string n) {
         setType(TokenType::NUM);
+        data = n;
     }
 };
 
@@ -75,7 +72,7 @@ class ErrorToken : public Token {
     public: 
 
     ErrorToken() {
-        setType(TokenType::NUM);
+        setType(TokenType::ERROR);
     }
 };
 

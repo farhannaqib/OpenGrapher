@@ -9,7 +9,7 @@
 int main() {
     std::string inputs[] {
         "1+2", "1+2*3", "1+2*3-4",
-        "1^2", "0+1^2", "E+1"
+        "1^2", "0+1^2", "E+1", "1+s"
     };
     
     for (std::string input : inputs){
@@ -20,21 +20,21 @@ int main() {
     return 0;
 }
 
-void addNode(std::stack<ASTNode*>* nodestack, Token token) {
+void addNode(std::stack<ASTNode*> &nodestack, Token token) {
     ASTNode* newNode = new ASTNode();
-    int size = nodestack->size();
+    int size = nodestack.size();
     if (size >= 0) {
         newNode->token = token;
     }
     if (size >= 1) {
-        newNode->rightChild = nodestack->top();
-        nodestack->pop();
+        newNode->rightChild = nodestack.top();
+        nodestack.pop();
     }
     if (size >= 2) {
-        newNode->leftChild = nodestack->top();
-        nodestack->pop();
+        newNode->leftChild = nodestack.top();
+        nodestack.pop();
     }
-    nodestack->push(newNode);
+    nodestack.push(newNode);
 };
 
 ASTNode* stringtoAST(std::string input) {
@@ -60,7 +60,7 @@ ASTNode* stringtoAST(std::string input) {
         else if (token.type == TokenType::LB) opstack.push(token);
         else if (token.type == TokenType::RB) {
             while (opstack.top().type != TokenType::LB) {
-                addNode(&nodestack, opstack.top());
+                addNode(nodestack, opstack.top());
                 opstack.pop();
             }
             opstack.pop();
@@ -72,7 +72,7 @@ ASTNode* stringtoAST(std::string input) {
                 int curPrec = tokens[(int)token.type].precedence;
                 while (topOp.type != TokenType::LB && (opPrec > curPrec 
                 || (opPrec == curPrec && token.type != TokenType::POW))) {
-                    addNode(&nodestack, opstack.top());
+                    addNode(nodestack, opstack.top());
                     opstack.pop();
                     if (opstack.empty()) break;
                     topOp = opstack.top();
@@ -91,7 +91,7 @@ ASTNode* stringtoAST(std::string input) {
     }
 
     while (!opstack.empty()) {
-        addNode(&nodestack, opstack.top());
+        addNode(nodestack, opstack.top());
         opstack.pop();
     }
 

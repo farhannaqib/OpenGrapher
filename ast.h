@@ -20,6 +20,7 @@ ASTNode* stringtoAST(std::string input);
 // returns equivalent string to the AST
 std::string ASTtoString(ASTNode* node) {
     if (!node) return "";
+    if (node->token.type == TokenType::ERROR) return node->token.data;
     return ASTtoString(node->leftChild).append(node->token.data)
     .append(ASTtoString(node->rightChild));
 }

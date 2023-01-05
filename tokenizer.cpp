@@ -36,14 +36,13 @@ Token read(std::string& input, bool lastWasRBOrNum) {
     for (int i = 0; i < 2; i++) {
         unsigned int len = constants[i].string.length();
         if (input.substr(0, len) == constants[i].string) {
-            NumToken numToken;
-            numToken.setNum(constants[i].string);
+            NumToken numToken = NumToken(constants[i].string);
             input.erase(0, len);
             return numToken;
         }
     }
 
-    std::string t;
+    std::string t = "";
     bool noDec = true;
     while(isdigit(input.front())) {
         t.append(1, input.front());
@@ -53,14 +52,13 @@ Token read(std::string& input, bool lastWasRBOrNum) {
                 t.append(1, input.front());
                 input.erase(0, 1);
                 noDec = false;
-            } else return token;
+            } else return ErrorToken();
         }
     }
-    if (t == "") return ErrorToken(); // error token
+    if (t == "" || t == ".") return ErrorToken(); // error token
 
     if (negValue) t.insert(0, "-");
-    NumToken numToken;
-    numToken.setNum(t);
+    NumToken numToken = NumToken(t);
     return numToken;
 }
 
@@ -73,6 +71,12 @@ std::queue<Token> readString(std::string input) {
         || q.back().type == TokenType::NUM)) 
         q.push(read(input, true));
         else q.push(read(input, false));
+
+        if (q.back().type == TokenType::ERROR) {
+            q = std::queue<Token>();
+            q.push(ErrorToken());
+            break;
+        }
     }
 
     return q;
