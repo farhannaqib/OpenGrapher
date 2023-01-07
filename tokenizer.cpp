@@ -66,6 +66,7 @@ std::queue<Token> readString(std::string input) {
     while (!input.empty()) {
         // read token
         Token t = read(input);
+        std::cout << t.data << std::endl;
 
         // deals with [+-] [+-]
         if ((int)t.type < 2 && (q.size() != 0 
@@ -76,14 +77,19 @@ std::queue<Token> readString(std::string input) {
 
         // deals with ![(Xn_] [+-]
         if ((int) t.type < 2 && (q.size()==0 || q.back().type == TokenType::LB 
-        || q.back().type == TokenType::MUL || q.back().type == TokenType::DIV || q.back().type == TokenType::POW)) {
+        || q.back().type == TokenType::MUL || q.back().type == TokenType::DIV 
+        || q.back().type == TokenType::POW)) {
             Token next = read(input);
             if (next.type == TokenType::NUM)  {
                 next.data = std::to_string(std::stoi(next.data)*(1-(2*(int) t.type)));
                 q.push(next);
-                continue;
             }
-            else q.push(NumToken("0")); // turns -[non num] into 0-[non num]
+            else {
+                q.push(NumToken("0")); // turns -[non num] into 0-[non num]
+                q.push(t);
+                q.push(next);
+            }
+            continue;
         }
 
         if (t.type == TokenType::ERROR) {

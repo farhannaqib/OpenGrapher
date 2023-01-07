@@ -11,12 +11,13 @@ int main() {
         "1+2", "1+2*3", "1+2*3-4",
         "1^2", "0+1^2", "E+1", "1+s",
         "1--2", "1--(-2)", "1+-2", "1-+2",
-        "-1", "SIN(2)", "MAX(2, 3)", "MAX(1+2,3)"
-        // fix double functions
+        "-1", "SIN(2)", "MAX(2, 3)", "MAX(1+2,3)", 
+        "(4+5)", "0-(1)", "0-(4+5)", "-(4+5)"
     };
     
     for (std::string input : inputs){
         ASTNode* output = stringtoAST(input);
+        std::cout << "done" << std::endl;
         std::cout << ASTtoString(output) << std::endl;
     }
 
