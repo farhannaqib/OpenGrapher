@@ -53,7 +53,7 @@ Token read(std::string& input) {
     return numToken;
 }
 
-// updates an addop token
+// helper method that updates an addop token
 // precondition: second token is also an addop
 void updateAddOp(Token &first, Token second) {
     if (first.type == second.type) first.setType(TokenType::ADD);
@@ -68,14 +68,23 @@ std::queue<Token> readString(std::string input) {
         Token t = read(input);
 
         // deals with [+-] [+-]
-        if ((int)t.type <= 2 && (q.size() != 0 
-        && (int) q.back().type <= 2)) {
+        if ((int)t.type < 2 && (q.size() != 0 
+        && (int) q.back().type < 2)) {
             updateAddOp(q.back(), t);
             continue; // consumes second token
         }
 
-        // deals with ![(Xn] [+-]
-        // TODO
+        // deals with ![(Xn_] [+-]
+        if ((int) t.type < 2 && (q.size()==0 || q.back().type == TokenType::LB 
+        || q.back().type == TokenType::MUL || q.back().type == TokenType::DIV || q.back().type == TokenType::POW)) {
+            Token next = read(input);
+            if (next.type == TokenType::NUM)  {
+                next.data = std::to_string(std::stoi(next.data)*(1-(2*(int) t.type)));
+                q.push(next);
+                continue;
+            }
+            else q.push(NumToken("0")); // turns -[non num] into 0-[non num]
+        }
 
         if (t.type == TokenType::ERROR) {
             q = std::queue<Token>();
