@@ -43,13 +43,12 @@ std::string ASTtoString(ASTNode* node) {
         }
     }
 
-    if ((int) node->token.type >= 8 && (int) node->token.type <= 21) {
+    if ((int) node->token.type >= 9 && (int) node->token.type <= 21) {
         if (node->leftChild) return node->token.data.append("(")
         .append(leftstr).append(", ").append(rightstr).append(")");
         return node->token.data.append("(").append(rightstr).append(")");
     } 
-
-    return leftstr.append(node->token.data).append(rightstr);
+    return leftstr.append(" ").append(node->token.data).append(" ").append(rightstr);
 }
 
 #endif

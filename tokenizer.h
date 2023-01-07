@@ -8,7 +8,7 @@ enum class TokenType {
     ADD, SUB,
     MUL, DIV,
     POW, MOD, 
-    LB, RB,
+    COMMA, LB, RB,
     MAX, MIN,
     LOG, LN,
     SIN, COS, TAN, 
@@ -23,10 +23,10 @@ static const struct TokenValues {
     std::string string;
     int precedence;
 } tokens[] = { // last three are placeholders
-    {"+", 1}, {"-", 1},
-    {"*", 2}, {"/", 2},
-    {"^", 3}, {"%", 2},
-    {"(", 0}, {")", 0},
+    {"+", 2}, {"-", 2},
+    {"*", 3}, {"/", 3},
+    {"^", 4}, {"%", 3},
+    {",", 1}, {"(", 0}, {")", 0},
     {"MAX", 0}, {"MIN", 0},
     {"LOG", 0}, {"LN", 0},
     {"SIN", 0}, {"COS", 0}, {"TAN", 0},
@@ -34,7 +34,7 @@ static const struct TokenValues {
     {"SQRT", 0}, {"ABS", 0},
     {"FLOOR", 0}, {"CIEL", 0},
     {"x", 0},
-    {"number", 0}, {"error", 0}
+    {"number", 0}, {"error", 0},
 };
 
 static const struct ConstantValues {

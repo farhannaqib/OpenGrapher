@@ -14,7 +14,7 @@ Token read(std::string& input) {
     while(isspace(input.front())) input.erase(0, 1);
 
     // checks through all tokens
-    for (int i = 0; i < 23; i++) {
+    for (int i = 0; i < 24; i++) {
         unsigned int len = tokens[i].string.length();
         if (input.substr(0, len) == tokens[i].string) {
 

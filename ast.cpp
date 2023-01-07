@@ -68,7 +68,7 @@ ASTNode* stringtoAST(std::string input) {
             }
             opstack.pop();
         }
-        else if ((int) token.type < 6) {
+        else if ((int) token.type < 7) {
             if (!opstack.empty()) {
                 Token topOp = opstack.top();
                 int opPrec = tokens[(int)topOp.type].precedence;
