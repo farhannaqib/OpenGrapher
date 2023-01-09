@@ -28,7 +28,7 @@ Token read(std::string& input) {
     for (int i = 0; i < 2; i++) {
         unsigned int len = constants[i].string.length();
         if (input.substr(0, len) == constants[i].string) {
-            NumToken numToken = NumToken(constants[i].string);
+            NumToken numToken = NumToken(std::to_string(constants[i].value));
             input.erase(0, len);
             return numToken;
         }
@@ -66,7 +66,6 @@ std::queue<Token> readString(std::string input) {
     while (!input.empty()) {
         // read token
         Token t = read(input);
-        std::cout << t.data << std::endl;
 
         // deals with [+-] [+-]
         if ((int)t.type < 2 && (q.size() != 0 

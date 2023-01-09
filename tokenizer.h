@@ -2,6 +2,7 @@
 #define TOKENIZER_H
 
 #include <string>
+#include <queue>
 
 // Token representations
 enum class TokenType {

@@ -1,28 +1,9 @@
-#include <iostream>
 #include <string>
 #include <queue>
 #include <stack>
 
 #include "tokenizer.h"
 #include "ast.h"
-
-int main() {
-    std::string inputs[] {
-        "1+2", "1+2*3", "1+2*3-4",
-        "1^2", "0+1^2", "E+1", "1+s",
-        "1--2", "1--(-2)", "1+-2", "1-+2",
-        "-1", "SIN(2)", "MAX(2, 3)", "MAX(1+2,3)", 
-        "(4+5)", "0-(1)", "0-(4+5)", "-(4+5)"
-    };
-    
-    for (std::string input : inputs){
-        ASTNode* output = stringtoAST(input);
-        std::cout << "done" << std::endl;
-        std::cout << ASTtoString(output) << std::endl;
-    }
-
-    return 0;
-}
 
 // helper method that adds node by removing 
 // from the nodestack when it can
@@ -132,5 +113,7 @@ std::string ASTtoString(ASTNode* node) {
         .append(leftstr).append(", ").append(rightstr).append(")");
         return node->token.data.append("(").append(rightstr).append(")");
     } 
+
+    // for num tokens
     return leftstr.append(node->token.data).append(rightstr);
 }
