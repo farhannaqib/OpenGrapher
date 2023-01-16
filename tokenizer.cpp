@@ -80,7 +80,7 @@ std::queue<Token> readString(std::string input) {
         || q.back().type == TokenType::POW)) {
             Token next = read(input);
             if (next.type == TokenType::NUM)  {
-                next.data = std::to_string(std::stoi(next.data)*(1-(2*(int) t.type)));
+                next.data = std::to_string(std::stod(next.data)*(1-(2*(int) t.type)));
                 q.push(next);
             }
             else {
