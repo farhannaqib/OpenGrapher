@@ -146,11 +146,11 @@ int main() {
     //}
 
     std::string inputs2[] {
-        "1+2", "1+2*3", "1+2*3-4",
-        "1^2", "0+1^2", "E+1"
+        "1+2+3+(6/4)*4 - 2^2"
     };
 
-    for (std::string input : inputs) {
+    for (std::string input : inputs2) {
+        std::cout << inputs2[0] << std::endl;
         ASTNode* output = stringtoAST(input);
         simplify(output);
         std::cout << ASTtoString(output) << std::endl;
