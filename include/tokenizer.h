@@ -34,7 +34,7 @@ static const struct TokenValues {
     {"CSC", 0}, {"SEC", 0}, {"COT", 0},
     {"SQRT", 0}, {"ABS", 0},
     {"FLOOR", 0}, {"CIEL", 0},
-    {"x", 0},
+    {"X", 0},
     {"number", 0}, {"error", 0},
 };
 

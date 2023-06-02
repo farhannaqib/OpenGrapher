@@ -32,13 +32,14 @@ void simplify(ASTNode* tree) {
 
     // considers how many nodes that we can use for calculations
     // are available
+    int numOfChildren = (tree->leftChild ? 1 : 0) + (tree->rightChild ? 1 : 0);
     int numOfSingleChildren = 0;
     if (tree->leftChild && isValidNum(tree->leftChild)) 
     numOfSingleChildren++;
     if (tree->rightChild && isValidNum(tree->rightChild)) 
     numOfSingleChildren++;
 
-    if (numOfSingleChildren == 1) {
+    if (numOfSingleChildren == 1 && numOfChildren == 1) {
         double child = std::stod(tree->rightChild->token.data);
         delete tree->rightChild;
         tree->rightChild = nullptr;
@@ -79,7 +80,6 @@ void simplify(ASTNode* tree) {
                 newData = std::to_string(ceil(child));
                 break;
             default:
-                newData = "";
                 break;
         }
         tree->token = NumToken(newData);
@@ -111,19 +111,18 @@ void simplify(ASTNode* tree) {
                 newData = std::to_string(pow(left,right));
                 break;
             case (TokenType::MOD):
-                newData = std::to_string((int) left % (int) right);
+                newData = std::to_string((int)left%(int)right);
                 break;
             case (TokenType::MAX):
-                newData = std::to_string(std::max(left, right));
+                newData = std::to_string(std::max(left,right));
                 break;
             case (TokenType::MIN):
-                newData = std::to_string(std::min(left, right));
+                newData = std::to_string(std::min(left,right));
                 break;
             case(TokenType::LOG):
                 newData = std::to_string(log(left)/log(right));
                 break;
             default:
-                newData = "";
                 break;
         }
         tree->token = NumToken(newData);
@@ -146,7 +145,7 @@ int main() {
     //}
 
     std::string inputs2[] {
-        "1+2+3+(6/4)*4 - 2^2"
+        "1+2+3+(6/4)*4 - 2^X"
     };
 
     for (std::string input : inputs2) {
