@@ -5,9 +5,7 @@
 
 #include "tokenizer.h"
 
-// reads a single Token character and 
-// removes it from the input
-Token read(std::string& input) {
+Token readToken(std::string& input) {
     Token token;
     token.setType(TokenType::ERROR);
 
@@ -65,7 +63,7 @@ std::queue<Token> readString(std::string input) {
 
     while (!input.empty()) {
         // read token
-        Token t = read(input);
+        Token t = readToken(input);
 
         // deals with [+-] [+-]
         if ((int)t.type < 2 && (q.size() != 0 
@@ -78,7 +76,7 @@ std::queue<Token> readString(std::string input) {
         if ((int) t.type < 2 && (q.size()==0 || q.back().type == TokenType::LB 
         || q.back().type == TokenType::MUL || q.back().type == TokenType::DIV 
         || q.back().type == TokenType::POW)) {
-            Token next = read(input);
+            Token next = readToken(input);
             if (next.type == TokenType::NUM)  {
                 next.data = std::to_string(std::stod(next.data)*(1-(2*(int) t.type)));
                 q.push(next);

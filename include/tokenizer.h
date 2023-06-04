@@ -77,6 +77,10 @@ class ErrorToken : public Token {
     }
 };
 
+// Reads and returns the next token while
+// removing it from the input string
+Token readToken(std::string& input);
+
 // Reads and returns a queue of tokens
 // corresponding with the input. If no match
 // is found, a queue with only the error token
