@@ -8,11 +8,11 @@
 enum class TokenType {
     ADD, SUB,
     MUL, DIV,
-    POW, MOD, 
+    POW, MOD,
     COMMA, LB, RB,
     MAX, MIN,
     LOG, LN,
-    SIN, COS, TAN, 
+    SIN, COS, TAN,
     CSC, SEC, COT,
     SQRT, ABS,
     FLOOR, CIEL,
