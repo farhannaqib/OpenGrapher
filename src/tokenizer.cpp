@@ -34,19 +34,19 @@ Token readToken(std::string& input) {
 
     std::string t = "";
     bool noDec = true;
-    while(isdigit(input.front())) {
-        t.append(1, input.front());
-        input.erase(0, 1);
+    while(isdigit(input.front()) || (noDec && input.front() == '.')) {
         if (input.front()=='.') {
-            if (noDec) {
-                t.append(1, input.front());
-                input.erase(0, 1);
-                noDec = false;
-            } else return ErrorToken();
+            t.append(1, input.front());
+            input.erase(0, 1);
+            noDec = false;
+        }
+        else {
+            t.append(1, input.front());
+            input.erase(0, 1);
         }
     }
-    if (t == "" || t == ".") return ErrorToken(); // error token
-
+    if (t == "" || t == "." || input.front()=='.') return ErrorToken();
+    
     NumToken numToken = NumToken(t);
     return numToken;
 }

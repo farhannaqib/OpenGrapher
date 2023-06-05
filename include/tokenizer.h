@@ -42,8 +42,8 @@ static const struct ConstantValues {
     std::string string;
     double value;
 } constants[] = {
-    {"PI", 3.14159265358979323846},
-    {"E", 2.71828182845904523536}
+    {"PI", 3.141592653589793},
+    {"E", 2.718281828459045}
 };
 
 // Token class that describes a single token
