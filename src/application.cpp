@@ -4,6 +4,7 @@
 #include "tokenizer.h"
 #include "ast.h"
 #include "simplify.h"
+#include "grapher.h"
 
 #if !defined(TEST)
 

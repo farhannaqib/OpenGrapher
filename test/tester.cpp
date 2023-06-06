@@ -3,7 +3,7 @@
 #include "testerutils.cpp"
 
 int main() {
-    IS_TRUE(testReadToken());
+    IS_TRUE(tokenizerTests());
     return 0;
 }
 

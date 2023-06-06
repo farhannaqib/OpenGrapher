@@ -77,8 +77,12 @@ class ErrorToken : public Token {
     }
 };
 
-// Reads and returns the next token while
-// removing it from the input string
+// Reads and returns the first token it sees
+// while removing it from the input string. 
+// Note, this means that strings such as "-1" 
+// will return a subtraction token. If no match
+// is found, an error token is returned.
+// Whitespace is removed when finding tokens
 Token readToken(std::string& input);
 
 // Reads and returns a queue of tokens
@@ -86,6 +90,8 @@ Token readToken(std::string& input);
 // is found, a queue with only the error token
 // is returned.
 // Whitespace is removed when finding tokens
+// Tokens will be added or removed based on 
+// relevance for parsing.
 std::queue<Token> readString(std::string input);
 
 #endif
