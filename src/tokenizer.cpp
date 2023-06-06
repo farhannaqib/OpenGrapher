@@ -6,8 +6,7 @@
 #include "tokenizer.h"
 
 Token readToken(std::string& input) {
-    Token token;
-    token.setType(TokenType::ERROR);
+    Token token = Token();
 
     while(isspace(input.front())) input.erase(0, 1);
 
@@ -15,7 +14,6 @@ Token readToken(std::string& input) {
     for (int i = 0; i < 24; i++) {
         unsigned int len = tokens[i].string.length();
         if (input.substr(0, len) == tokens[i].string) {
-
             token.setType((TokenType) i);
             input.erase(0, len);
             return token;
@@ -82,6 +80,7 @@ std::queue<Token> readString(std::string input) {
                 q.push(next);
             }
             else {
+                // note: maybe switch this to -1*[] instead of 0-[]?
                 q.push(NumToken("0")); // turns -[non num] into 0-[non num]
                 q.push(t);
                 q.push(next);

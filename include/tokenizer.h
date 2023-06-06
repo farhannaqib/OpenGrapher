@@ -53,9 +53,20 @@ class Token {
     TokenType type;
     std::string data;
 
+    Token() {}
+
+    Token(TokenType t) {
+        setType(t);
+    }
+
     void setType(TokenType t) {
         type = t;
         data = tokens[(int)t].string;
+    }
+
+    bool operator==(const Token& other) const {
+        if (type == other.type) return true;
+        return data == other.data;
     }
 };
 
@@ -66,6 +77,10 @@ class NumToken : public Token {
     NumToken(std::string n) {
         setType(TokenType::NUM);
         data = n;
+    }
+
+    bool operator==(const NumToken& other) const {
+        return data == other.data;
     }
 };
 

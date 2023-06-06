@@ -3,6 +3,10 @@
 #include "testerutils.cpp"
 #include "tokenizer.h"
 
+// note: rewrite like all of this lmao, 
+// hardcoding the tests is mid
+// just use the == operator for Token
+
 // --- readToken tests --- //
 
 bool testReadBasicToken() {
@@ -117,12 +121,35 @@ bool testRemovingTokensFromString() {
 }
 
 bool testNegatingNumberInString() {
-    // TODO: fix issue with arbitrary floats
     std::string input = "-1";
     std::queue<Token> tokens = readString(input);
     IS_EQUAL(tokens.size(), 1);
     IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "-1.000000");
+    IS_EQUAL(std::stod(tokens.front().data), -1);
+    return true;
+}
+
+bool testAddingTokensToString() {
+    std::string input = "-(1+2)";
+    std::queue<Token> tokens = readString(input);
+    IS_EQUAL(tokens.size(), 7);
+    IS_EQUAL(tokens.front().type, TokenType::NUM);
+    IS_EQUAL(tokens.front().data, "0");
+    return true;
+}
+
+bool testReadFunctions() {
+    std::string input = "SIN(1)";
+    std::queue<Token> tokens = readString(input);
+    IS_EQUAL(tokens.size(), 4);
+    IS_EQUAL(tokens.front().type, TokenType::SIN);
+    tokens.pop();
+    IS_EQUAL(tokens.front().type, TokenType::LB);
+    tokens.pop();
+    IS_EQUAL(tokens.front().type, TokenType::NUM);
+    IS_EQUAL(tokens.front().data, "1");
+    tokens.pop();
+    IS_EQUAL(tokens.front().type, TokenType::RB);
     return true;
 }
 
@@ -130,6 +157,8 @@ bool testReadString() {
     IS_TRUE(testReadBasicString());
     IS_TRUE(testRemovingTokensFromString());
     IS_TRUE(testNegatingNumberInString());
+    IS_TRUE(testAddingTokensToString());
+    IS_TRUE(testReadFunctions());
     return true;
 }
 
