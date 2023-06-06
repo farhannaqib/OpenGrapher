@@ -68,19 +68,19 @@ class Token {
         if (type == other.type) return true;
         return data == other.data;
     }
+
+    bool operator!=(const Token& other) const {
+        return !(*this == other);
+    }
 };
 
 // Number token that stores its number
 class NumToken : public Token {
     public:
 
-    NumToken(std::string n) {
+    NumToken(double n) {
         setType(TokenType::NUM);
-        data = n;
-    }
-
-    bool operator==(const NumToken& other) const {
-        return data == other.data;
+        data = std::to_string(n);
     }
 };
 

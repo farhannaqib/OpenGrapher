@@ -12,14 +12,12 @@
 bool testReadBasicToken() {
     std::string input = "1+2";
     Token token = readToken(input);
-    IS_EQUAL(token.type, TokenType::NUM);
-    IS_EQUAL(token.data, "1");
+    IS_EQUAL(token, NumToken(1));
     IS_EQUAL(input, "+2");
     token = readToken(input);
-    IS_EQUAL(token.type, TokenType::ADD);
+    IS_EQUAL(token, Token(TokenType::ADD));
     token = readToken(input);
-    IS_EQUAL(token.type, TokenType::NUM);
-    IS_EQUAL(token.data, "2");
+    IS_EQUAL(token, NumToken(2));
     return true;
 }
 
@@ -27,8 +25,7 @@ bool testReadAllBasicTokens() {
     std::string input = "+-*/^%,()MAXMINLOGLNSINCOSTANCSCSECCOTSQRTABSFLOORCIELX";
     for (int i = 0; i < 24; i++) {
         Token token = readToken(input);
-        IS_EQUAL(token.type, (TokenType) i);
-        IS_EQUAL(token.data, tokens[i].string);
+        IS_EQUAL(token, Token((TokenType) i));
     }
     return true;
 }
@@ -38,12 +35,10 @@ bool testReadConstant() {
     // so code is much less precise, revisit later
     std::string input = "PI";
     Token token = readToken(input);
-    IS_EQUAL(token.type, TokenType::NUM);
-    IS_EQUAL(token.data, "3.141593");
+    IS_EQUAL(token, NumToken(3.141593));
     input = "E";
     token = readToken(input);
-    IS_EQUAL(token.type, TokenType::NUM);
-    IS_EQUAL(token.data, "2.718282");
+    IS_EQUAL(token, NumToken(2.718282));
     return true;
 }
 
@@ -53,12 +48,11 @@ bool testReadNum() {
     for (int i = 0; i < 3; i++) {
         std::string input = inputs[i];
         token = readToken(input);
-        IS_EQUAL(token.type, TokenType::NUM);
-        IS_EQUAL(token.data, inputs[i]);
+        IS_EQUAL(token, NumToken(std::stod(inputs[i])));
     }
     std::string input = "1.2.3";
     token = readToken(input);
-    IS_EQUAL(token.type, TokenType::ERROR);
+    IS_EQUAL(token, ErrorToken());
     return true;
 }
 
@@ -66,7 +60,7 @@ bool testReadError() {
     std::string inputs[] = {".", "", "amogus"};
     for (std::string input : inputs) {
         Token token = readToken(input);
-        IS_EQUAL(token.type, TokenType::ERROR);
+        IS_EQUAL(token, ErrorToken());
     }
     return true;
 }
@@ -86,13 +80,11 @@ bool testReadBasicString() {
     std::string input = "1+2";
     std::queue<Token> tokens = readString(input);
     IS_EQUAL(tokens.size(), 3);
-    IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "1");
+    IS_EQUAL(tokens.front(), NumToken(1));
     tokens.pop();
-    IS_EQUAL(tokens.front().type, TokenType::ADD);
+    IS_EQUAL(tokens.front(), Token(TokenType::ADD));
     tokens.pop();
-    IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "2");
+    IS_EQUAL(tokens.front(), NumToken(2));
     return true;
 }
 
@@ -100,23 +92,19 @@ bool testRemovingTokensFromString() {
     std::string input = "1+-2";
     std::queue<Token> tokens = readString(input);
     IS_EQUAL(tokens.size(), 3);
-    IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "1");
+    IS_EQUAL(tokens.front(), NumToken(1));
     tokens.pop();
-    IS_EQUAL(tokens.front().type, TokenType::SUB);
+    IS_EQUAL(tokens.front(), Token(TokenType::SUB));
     tokens.pop();
-    IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "2");
+    IS_EQUAL(tokens.front(), NumToken(2));
     input = "1--2";
     tokens = readString(input);
     IS_EQUAL(tokens.size(), 3);
-    IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "1");
+    IS_EQUAL(tokens.front(), NumToken(1));
     tokens.pop();
     IS_EQUAL(tokens.front().type, TokenType::ADD);
     tokens.pop();
-    IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "2");
+    IS_EQUAL(tokens.front(), NumToken(2));
     return true;
 }
 
@@ -133,8 +121,7 @@ bool testAddingTokensToString() {
     std::string input = "-(1+2)";
     std::queue<Token> tokens = readString(input);
     IS_EQUAL(tokens.size(), 7);
-    IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "0");
+    IS_EQUAL(tokens.front(), NumToken(0));
     return true;
 }
 
@@ -142,14 +129,13 @@ bool testReadFunctions() {
     std::string input = "SIN(1)";
     std::queue<Token> tokens = readString(input);
     IS_EQUAL(tokens.size(), 4);
-    IS_EQUAL(tokens.front().type, TokenType::SIN);
+    IS_EQUAL(tokens.front(), Token(TokenType::SIN));
     tokens.pop();
-    IS_EQUAL(tokens.front().type, TokenType::LB);
+    IS_EQUAL(tokens.front(), Token(TokenType::LB));
     tokens.pop();
-    IS_EQUAL(tokens.front().type, TokenType::NUM);
-    IS_EQUAL(tokens.front().data, "1");
+    IS_EQUAL(tokens.front(), NumToken(1));
     tokens.pop();
-    IS_EQUAL(tokens.front().type, TokenType::RB);
+    IS_EQUAL(tokens.front(), Token(TokenType::RB));
     return true;
 }
 

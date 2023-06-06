@@ -24,7 +24,7 @@ Token readToken(std::string& input) {
     for (int i = 0; i < 2; i++) {
         unsigned int len = constants[i].string.length();
         if (input.substr(0, len) == constants[i].string) {
-            NumToken numToken = NumToken(std::to_string(constants[i].value));
+            NumToken numToken = NumToken(constants[i].value);
             input.erase(0, len);
             return numToken;
         }
@@ -45,7 +45,7 @@ Token readToken(std::string& input) {
     }
     if (t == "" || t == "." || input.front()=='.') return ErrorToken();
     
-    NumToken numToken = NumToken(t);
+    NumToken numToken = NumToken(std::stod(t));
     return numToken;
 }
 
@@ -81,7 +81,7 @@ std::queue<Token> readString(std::string input) {
             }
             else {
                 // note: maybe switch this to -1*[] instead of 0-[]?
-                q.push(NumToken("0")); // turns -[non num] into 0-[non num]
+                q.push(NumToken(0)); // turns -[non num] into 0-[non num]
                 q.push(t);
                 q.push(next);
             }
