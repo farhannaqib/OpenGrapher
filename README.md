@@ -1,9 +1,9 @@
-# Grapher (name is work in progress)
+# OpenGrapher
 
-graphing visualizer in C++
+A graphing visualizer in C++
 
 Completed product should have the following implemented:
 
 - Parser
-- Interpreter/Equation Solver
+- Interpreter/Expression Solver
 - GUI using OpenGL
