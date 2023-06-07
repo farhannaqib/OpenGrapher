@@ -4,9 +4,10 @@
 
 #include "tokenizer.h"
 #include "ast.h"
-#include "simplify.h"
+#include "solver.h"
 
 // TODO fix simplify, what if it runs into a 0? 
+// TODO fix the comma thing
 
 // Helper method to determine whether 
 // a branch is a number node
@@ -20,12 +21,12 @@ void simplify(ASTNode* tree) {
     if (!tree) return;
     // functions w two args get parsed w a comma to maintain
     // the order of args, this removes the comma for simplifying
-    if (tree->rightChild && tree->rightChild->token.type == TokenType::COMMA) {
-        ASTNode* left = tree->rightChild->leftChild;
-        ASTNode* right = tree->rightChild->rightChild;
-        tree->rightChild->leftChild = nullptr;
-        tree->rightChild->rightChild = nullptr;
-        delete tree->rightChild;
+    if (tree->leftChild && tree->leftChild->token.type == TokenType::COMMA) {
+        ASTNode* left = tree->leftChild->leftChild;
+        ASTNode* right = tree->leftChild->rightChild;
+        tree->leftChild->leftChild = nullptr;
+        tree->leftChild->rightChild = nullptr;
+        delete tree->leftChild;
         tree->leftChild = left;
         tree->rightChild = right;
     }

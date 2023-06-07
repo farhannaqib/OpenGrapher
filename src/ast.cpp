@@ -110,11 +110,15 @@ std::string ASTtoString(ASTNode* node) {
     }
 
     if ((int) node->token.type >= 9 && (int) node->token.type <= 21) {
-        if (node->leftChild) return node->token.data.append("(")
+        if (node->rightChild) return node->token.data.append("(")
         .append(leftstr).append(", ").append(rightstr).append(")");
-        return node->token.data.append("(").append(rightstr).append(")");
+        return node->token.data.append("(").append(leftstr).append(")");
     } 
 
     // for num tokens
-    return leftstr.append(node->token.data).append(rightstr);
+    std::string output = leftstr.append(node->token.data).append(rightstr);
+    while (output.find(".000000") != std::string::npos) {
+        output.erase(output.find(".000000"), 7);
+    }
+    return output;
 }
