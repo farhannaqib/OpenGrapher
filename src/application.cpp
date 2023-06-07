@@ -28,7 +28,7 @@ int main() {
     };
 
     for (std::string input : inputs2) {
-        std::cout << inputs2[0] << std::endl;
+        std::cout << input << std::endl;
         ASTNode* output = stringtoAST(input);
         simplify(output);
         std::cout << ASTtoString(output) << std::endl;

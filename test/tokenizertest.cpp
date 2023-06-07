@@ -3,10 +3,6 @@
 #include "testerutils.cpp"
 #include "tokenizer.h"
 
-// note: rewrite like all of this lmao, 
-// hardcoding the tests is mid
-// just use the == operator for Token
-
 // --- readToken tests --- //
 
 bool testReadBasicToken() {
@@ -65,12 +61,22 @@ bool testReadError() {
     return true;
 }
 
+bool testNoIntPreference() {
+    std::string input1 = "1.0";
+    std::string input2 = "1";
+    Token token1 = readToken(input1);
+    Token token2 = readToken(input2);
+    IS_EQUAL(token1, token2);
+    return true;
+}
+
 bool testReadToken() {
     IS_TRUE(testReadBasicToken());
     IS_TRUE(testReadAllBasicTokens());
     IS_TRUE(testReadConstant());
     IS_TRUE(testReadNum());
     IS_TRUE(testReadError());
+    IS_TRUE(testNoIntPreference());
     return true;
 }
 
