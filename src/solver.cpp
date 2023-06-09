@@ -8,6 +8,14 @@
 
 // TODO fix simplify, what if it runs into a 0? 
 // TODO fix the comma thing
+bool isValidTree(ASTNode* tree) {
+    if (!tree) return true;
+    if (tree->token.type == TokenType::VAR|| tree->token.type == TokenType::NUM) 
+    return (tree->leftChild == nullptr && tree->rightChild == nullptr);
+    if ((int) tree->token.type < 7) return (tree->leftChild && tree->rightChild);
+    // uhh not sure what to do for the rest, might have to fix comma
+    // whatever, ill deal w this later
+}
 
 // Helper method to determine whether 
 // a branch is a number node

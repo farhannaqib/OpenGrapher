@@ -57,12 +57,21 @@ bool testParentheticalStringtoAST() {
     return true;
 }
 
+bool testErrorStringtoAST() {
+    // fix this? 
+    std::string input = "*2";
+    ASTNode* ast = stringtoAST(input);
+    std::cout << ast->token.data << std::endl;
+    return true;
+}
+
 bool testStringtoAST() {
     IS_TRUE(testChartoAST());
     IS_TRUE(testSimpleStringtoAST());
     IS_TRUE(testLessSimpleStringtoAST());
     IS_TRUE(testFunctiontoAST());
     IS_TRUE(testParentheticalStringtoAST());
+    IS_TRUE(testErrorStringtoAST());
     return true;
 }
 

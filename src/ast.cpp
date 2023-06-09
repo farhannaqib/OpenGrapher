@@ -44,7 +44,7 @@ ASTNode* stringtoAST(std::string input) {
             nodestack.push(num);
         }
         else if (token.type == TokenType::LB) opstack.push(token);
-        else if (token.type == TokenType::RB) {
+        else if (token.type == TokenType::RB && !opstack.empty()) {
             while (opstack.top().type != TokenType::LB) {
                 addNode(nodestack, opstack.top());
                 opstack.pop();
@@ -80,7 +80,6 @@ ASTNode* stringtoAST(std::string input) {
         addNode(nodestack, opstack.top());
         opstack.pop();
     }
-
     return nodestack.top();
 }
 
