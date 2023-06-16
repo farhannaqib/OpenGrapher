@@ -50,6 +50,11 @@ ASTNode* stringtoAST(std::string input) {
                 opstack.pop();
             }
             opstack.pop();
+            if (!opstack.empty() && (int)opstack.top().type > 8 &&
+            (int)opstack.top().type < 23) {
+                addNode(nodestack, opstack.top());
+                opstack.pop();
+            }
         }
         else if ((int) token.type < 7) {
             if (!opstack.empty()) {

@@ -57,11 +57,15 @@ bool testParentheticalStringtoAST() {
     return true;
 }
 
-bool testErrorStringtoAST() {
-    // fix this? 
-    std::string input = "*2";
+bool testFunctionParenthesestoAST() {
+    std::string input = "SIN(1+2)";
     ASTNode* ast = stringtoAST(input);
-    std::cout << ast->token.data << std::endl;
+    IS_EQUAL(ast->token, Token(TokenType::SIN));
+    IS_EQUAL(*ast->leftChild, *stringtoAST("1+2"));
+    ast = stringtoAST("SIN(1)+2");
+    IS_EQUAL(ast->token, Token(TokenType::ADD));
+    IS_EQUAL(*ast->leftChild, *stringtoAST("SIN(1)"));
+    IS_EQUAL(ast->rightChild->token, NumToken(2));
     return true;
 }
 
@@ -71,7 +75,7 @@ bool testStringtoAST() {
     IS_TRUE(testLessSimpleStringtoAST());
     IS_TRUE(testFunctiontoAST());
     IS_TRUE(testParentheticalStringtoAST());
-    IS_TRUE(testErrorStringtoAST());
+    IS_TRUE(testFunctionParenthesestoAST());
     return true;
 }
 
