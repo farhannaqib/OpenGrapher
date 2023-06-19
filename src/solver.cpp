@@ -1,6 +1,7 @@
 #include <math.h>
 #include <string>
 #include <iostream>
+#include <limits>
 
 #include "tokenizer.h"
 #include "ast.h"
@@ -48,6 +49,7 @@ void simplify(ASTNode* tree) {
 
         switch(tree->token.type) {
             case (TokenType::LN):
+                if (child <= 0) throw math_errhandling;
                 newData = log(child);
                 break;
             case (TokenType::SIN):
@@ -57,18 +59,23 @@ void simplify(ASTNode* tree) {
                 newData = cos(child);
                 break;
             case (TokenType::TAN):
+                if (cos(child) == 0) throw math_errhandling;
                 newData = tan(child);
                 break;
             case (TokenType::CSC):
+                if (sin(child) == 0) throw math_errhandling;
                 newData = 1.0/sin(child);
                 break;
             case (TokenType::SEC):
+                if (cos(child) == 0) throw math_errhandling;
                 newData = 1.0/cos(child);
                 break;
             case (TokenType::COT):
+                if (tan(child) == 0) throw math_errhandling;
                 newData = 1.0/tan(child);
                 break;
             case (TokenType::SQRT):
+                if (child < 0) throw math_errhandling;
                 newData = sqrt(child);
                 break;
             case (TokenType::ABS):
@@ -104,12 +111,14 @@ void simplify(ASTNode* tree) {
                 newData = left*right;
                 break;
             case (TokenType::DIV):
+                if (right == 0) throw math_errhandling;
                 newData = left/right;
                 break;
             case (TokenType::POW):
                 newData = pow(left,right);
                 break;
             case (TokenType::MOD):
+                if (right <= 0) throw math_errhandling;
                 newData = (int)left%(int)right;
                 break;
             case (TokenType::MAX):
@@ -119,6 +128,7 @@ void simplify(ASTNode* tree) {
                 newData = std::min(left,right);
                 break;
             case(TokenType::LOG):
+                if (left <= 0 || right <= 0) throw math_errhandling;
                 newData = log(left)/log(right);
                 break;
             default:

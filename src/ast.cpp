@@ -124,5 +124,6 @@ std::string ASTtoString(ASTNode* node) {
     while (output.find(".000000") != std::string::npos) {
         output.erase(output.find(".000000"), 7);
     }
+    if (output == "-0") output = "0";
     return output;
 }
