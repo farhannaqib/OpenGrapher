@@ -15,6 +15,29 @@ bool isValidNum(ASTNode* node) {
     return false;
 }
 
+// Helper method to determine whether
+// a branch is a number or variable node
+bool isValidNumOrVar(ASTNode* node) {
+    if (node->leftChild || node->rightChild) return false;
+    if (node->token.type == TokenType::NUM 
+    || node->token.type == TokenType::VAR) return true;
+    return false;
+}
+
+bool canBeSimplified(ASTNode* tree) {
+    if (!tree || tree->token == TokenType::ERROR) return false;
+    if (isValidNumOrVar(tree)) return true;
+    if ((int) tree->token.type <= 6) {
+        return canBeSimplified(tree->leftChild) && canBeSimplified(tree->rightChild);
+    }
+    else if ((int) tree->token.type < 23 && (int) tree->token.type > 8) {
+        return canBeSimplified(tree->leftChild);
+    }
+    return false;
+}
+
+// TODO: rework this to not get rid of 
+// the comma unless it can be simplified
 void simplify(ASTNode* tree) {
     if (!tree) return;
     // functions w two args get parsed w a comma to maintain

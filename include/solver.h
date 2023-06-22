@@ -4,8 +4,15 @@
 #include "tokenizer.h"
 #include "ast.h"
 
+// checks whether a tree can be simplified
+// into a number node, if all variable nodes
+// are replaced. This checks for whether functions
+// have the correct number of arguments
+bool canBeSimplified(ASTNode* tree);
+
 // Simplifies the tree by rearranging it and solving
 // as much as possible to give it a cleaner AST tree
+// An error is thrown if the current tree is not valid
 void simplify(ASTNode* tree);
 
 #endif

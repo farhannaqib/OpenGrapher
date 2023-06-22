@@ -3,6 +3,29 @@
 #include "testerutils.cpp"
 #include "solver.h"
 
+// -- canBeSimplified tests -- //
+
+bool testCanBeSimplified() {
+    std::string input = "1+2";
+    ASTNode* ast = stringtoAST(input);
+    IS_TRUE(canBeSimplified(ast));
+    ast = stringtoAST("1+(2)");
+    IS_TRUE(canBeSimplified(ast));
+    ast = stringtoAST("1+2*3");
+    IS_TRUE(canBeSimplified(ast));
+    ast = stringtoAST("1+2)");
+    IS_FALSE(canBeSimplified(ast));
+    ast = stringtoAST("1+2*X");
+    IS_TRUE(canBeSimplified(ast));
+    ast = stringtoAST("1+SIN(X)");
+    IS_TRUE(canBeSimplified(ast));
+    ast = stringtoAST("1+SIN(X+2");
+    IS_FALSE(canBeSimplified(ast));
+    ast = stringtoAST("1+SIN(S+2)");
+    IS_FALSE(canBeSimplified(ast));
+    return true;
+}
+
 // --- simplify tests --- //
 
 bool testBasicSimplify() {
@@ -78,6 +101,7 @@ bool testSimplify() {
 // ---------------------- //
 
 bool solverTests() {
+    IS_TRUE(testCanBeSimplified());
     IS_TRUE(testSimplify());
     return true;
 }
