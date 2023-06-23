@@ -8,6 +8,7 @@
 // into a number node, if all variable nodes
 // are replaced. This checks for whether functions
 // have the correct number of arguments
+// cannot be used on an already simplified tree
 bool canBeSimplified(ASTNode* tree);
 
 // Simplifies the tree by rearranging it and solving

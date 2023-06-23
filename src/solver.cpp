@@ -36,12 +36,14 @@ bool canBeSimplified(ASTNode* tree) {
     return false;
 }
 
-// TODO: rework this to not get rid of 
-// the comma unless it can be simplified
 void simplify(ASTNode* tree) {
     if (!tree) return;
     // functions w two args get parsed w a comma to maintain
     // the order of args, this removes the comma for simplifying
+    // this also means that canBeSimplified returns false, since it 
+    // expects a function to have one arg, that being the comma...
+    // No point in fixing it since the application only has to check
+    // a given tree once, and the tree resets after each new input
     if (tree->leftChild && tree->leftChild->token.type == TokenType::COMMA) {
         ASTNode* left = tree->leftChild->leftChild;
         ASTNode* right = tree->leftChild->rightChild;
