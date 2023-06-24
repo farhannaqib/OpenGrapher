@@ -10,7 +10,7 @@
 
 // #include "tokenizer.h"
 // #include "ast.h"
-// #include "simplify.h"
+// #include "solver.h"
 // #include "grapher.h"
 
 // const size_t WIDTH = 800;

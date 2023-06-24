@@ -98,10 +98,28 @@ bool testSimplify() {
     return true;
 }
 
+// -- evaluateAtX tests -- //
+
+bool testEvaluateAtX() {
+    std::string input = "1+X";
+    ASTNode* ast = stringtoAST(input);
+    IS_EQUAL(evaluateAtX(ast, 1), 2);
+    IS_EQUAL(evaluateAtX(ast, 2), 3);
+    IS_EQUAL(evaluateAtX(ast, 3), 4);
+    IS_EQUAL(evaluateAtX(ast, -1), 0);
+    ast = stringtoAST("1+X*2");
+    IS_EQUAL(evaluateAtX(ast, 1), 3);
+    IS_EQUAL(evaluateAtX(ast, 2), 5);
+    IS_EQUAL(evaluateAtX(ast, 3), 7);
+    IS_EQUAL(evaluateAtX(ast, -1), -1);
+    return true;
+}
+
 // ---------------------- //
 
 bool solverTests() {
     IS_TRUE(testCanBeSimplified());
     IS_TRUE(testSimplify());
+    IS_TRUE(testEvaluateAtX());
     return true;
 }

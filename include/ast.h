@@ -47,4 +47,8 @@ ASTNode* stringtoAST(std::string input);
 // returns equivalent string to the AST
 std::string ASTtoString(ASTNode* node);
 
+ASTNode* copyAST(ASTNode* node);
+
+void deleteAST(ASTNode* node);
+
 #endif

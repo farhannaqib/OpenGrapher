@@ -127,3 +127,19 @@ std::string ASTtoString(ASTNode* node) {
     if (output == "-0") output = "0";
     return output;
 }
+
+ASTNode* copyAST(ASTNode* tree) {
+    if (!tree) return nullptr;
+    ASTNode* copy = new ASTNode();
+    copy->token = tree->token;
+    copy->leftChild = copyAST(tree->leftChild);
+    copy->rightChild = copyAST(tree->rightChild);
+    return copy;
+}
+
+void deleteAST(ASTNode* tree) {
+    if (!tree) return;
+    deleteAST(tree->leftChild);
+    deleteAST(tree->rightChild);
+    delete tree;
+}
