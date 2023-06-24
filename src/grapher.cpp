@@ -13,10 +13,6 @@
 #include "solver.h"
 #include "grapher.h"
 
-const size_t WIDTH = 800;
-const size_t HEIGHT = 600;
-const char* WINDOW_NAME = "Test Window";
-
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
     "out vec4 vertexColor;\n"
@@ -73,7 +69,7 @@ bool Grapher::init() {
 #endif
 
     // create window and set context
-    window = glfwCreateWindow(WIDTH, HEIGHT, WINDOW_NAME, NULL, NULL);
+    window = glfwCreateWindow(width, height, windowName, NULL, NULL);
     if (!window) {
         std::cerr << "ERROR: can't open window" << std::endl;
         glfwTerminate();
@@ -129,14 +125,28 @@ bool Grapher::init() {
 }
 
 void Grapher::run() {
-    // temporary vertices
-    float vertices[] = {
-        -1.0f, 0.5f, 0.0f,
-        -0.5f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        1.0f, -0.5f, 0.0f
-    };
+
+    std::string input = "COS(X)";
+    ASTNode* tree = stringtoAST(input);
+
+    const int size = 100;
+    float range = 10;
+    float* x = new float[size];
+    float* y = new float[size];
+    for (int i = 0; i < size; i++) {
+        x[i] = (float)i / (float)size * range - range / 2.0f;
+        y[i] = (float) evaluateAtX(tree, x[i]);
+    }
+
+    float rangey = 6;
+    // generate vertices
+    float vertices[size*3];
+    for (int i = 0; i < size; i++) {
+        vertices[i*3] = 2.0f*x[i]/range;
+        vertices[i*3+1] = 2.0f*y[i]/rangey;
+        vertices[i*3+2] = 0.0f;
+        std::cout << vertices[i*3] << " " << vertices[i*3+1] << std::endl;
+    }
 
     glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &VAO);
@@ -163,7 +173,7 @@ void Grapher::run() {
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_BLEND);
         glDepthMask(GL_FALSE);
-        glDrawArrays(GL_LINE_STRIP, 0, 5);
+        glDrawArrays(GL_LINE_STRIP, 0, size);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
