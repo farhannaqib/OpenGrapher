@@ -41,6 +41,8 @@ int main() {
     //     std::cout << ASTtoString(output) << std::endl;
     // }
 
+    TEMPNAME();
+
     return 0;
 }
 
