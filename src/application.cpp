@@ -41,7 +41,9 @@ int main() {
     //     std::cout << ASTtoString(output) << std::endl;
     // }
 
-    TEMPNAME();
+    Grapher grapher = Grapher();
+    grapher.init();
+    grapher.run();
 
     return 0;
 }

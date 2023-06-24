@@ -1,5 +1,3 @@
-int TEMPNAME();
-
 #ifdef __APPLE__
 // Defined before OpenGL and GLUT includes to avoid deprecation messages
 #define GL_SILENCE_DEPRECATION
@@ -10,11 +8,19 @@ int TEMPNAME();
 class Grapher {
     public:
         unsigned int width, height;
-        const std::string windowName = "OpenGrapher";
+        const char* windowName = "OpenGrapher";
 
-        Grapher(int width = 800, int height = 600);
+        Grapher(unsigned int width = 800, unsigned int height = 600);
         ~Grapher();
 
+        // initializes GLFW3, GLAD, sets up the window
+        // and the shader program
         bool init();
 
+        void run();
+
+    private:
+        GLFWwindow* window;
+        unsigned int shaderProgram;
+        unsigned int VAO, VBO;
 };

@@ -45,10 +45,18 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-Grapher::Grapher(int width, int height)
+Grapher::Grapher(unsigned int width, unsigned int height)
 {
     this->width = width;
     this->height = height;
+}
+
+Grapher::~Grapher()
+{
+    if (VBO) glDeleteBuffers(1, &VBO);
+    if (VAO) glDeleteVertexArrays(1, &VAO);
+    if (shaderProgram) glDeleteProgram(shaderProgram);
+    glfwTerminate();
 }
 
 bool Grapher::init() {
@@ -64,29 +72,19 @@ bool Grapher::init() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    return true;
-}
-
-Grapher::~Grapher()
-{
-    glfwTerminate();
-}
-
-int TEMPNAME()
-{
     // create window and set context
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, WINDOW_NAME, NULL, NULL);
+    window = glfwCreateWindow(WIDTH, HEIGHT, WINDOW_NAME, NULL, NULL);
     if (!window) {
         std::cerr << "ERROR: can't open window" << std::endl;
         glfwTerminate();
-        return -1;
+        return false;
     }
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cerr << "ERROR: can't load GLAD" << std::endl;
-        return -1;
+        return false;
     }
 
     // build shader program
@@ -113,7 +111,6 @@ int TEMPNAME()
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
-    unsigned int shaderProgram;
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
@@ -127,6 +124,12 @@ int TEMPNAME()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    if (!success) return false;
+    return true;
+}
+
+void Grapher::run() {
+    // temporary vertices
     float vertices[] = {
         -1.0f, 0.5f, 0.0f,
         -0.5f, 0.0f, 0.0f,
@@ -135,8 +138,6 @@ int TEMPNAME()
         1.0f, -0.5f, 0.0f
     };
 
-    unsigned int VAO;
-    unsigned int VBO;
     glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -167,11 +168,4 @@ int TEMPNAME()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    glDeleteBuffers(1, &VBO);
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteProgram(shaderProgram);
-    glfwTerminate();
-
-    return 0;
 }
