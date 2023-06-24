@@ -16,4 +16,10 @@ bool canBeSimplified(ASTNode* tree);
 // An error is thrown if the current tree is not valid
 void simplify(ASTNode* tree);
 
+// Evaluates the tree at a given x value
+// Throws an invalid_argument error if tree cannot be simplified
+// Throws a math_errhandling error if the calculation
+// isn't well-defined at x
+double evaluateAtX(ASTNode* tree, double x);
+
 #endif

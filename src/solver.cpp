@@ -162,3 +162,39 @@ void simplify(ASTNode* tree) {
         tree->token = NumToken(newData);
     }
 }
+
+void replaceVar(ASTNode* tree, double x) {
+    if (!tree) return;
+    if (tree->token.type == TokenType::VAR) {
+        tree->token = NumToken(x);
+    }
+    replaceVar(tree->leftChild, x);
+    replaceVar(tree->rightChild, x);
+}
+
+ASTNode* copyTree(ASTNode* tree) {
+    if (!tree) return nullptr;
+    ASTNode* copy = new ASTNode();
+    copy->token = tree->token;
+    copy->leftChild = copyTree(tree->leftChild);
+    copy->rightChild = copyTree(tree->rightChild);
+    return copy;
+}
+
+void deleteTree(ASTNode* tree) {
+    if (!tree) return;
+    deleteTree(tree->leftChild);
+    deleteTree(tree->rightChild);
+    delete tree;
+}
+
+double evaluateAtX(ASTNode* tree, double x) {
+    if (!tree) throw std::invalid_argument("Tree is null");
+    if (!canBeSimplified(tree)) throw std::invalid_argument("Tree cannot be simplified");
+    ASTNode* copy = copyTree(tree);
+    replaceVar(copy, x);
+    simplify(copy);
+    double result = std::stod(copy->token.data);
+    deleteTree(copy);
+    return result;
+}

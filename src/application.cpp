@@ -25,6 +25,11 @@ int main() {
        std::cout << input << " = " << ASTtoString(output) << std::endl;
     }
 
+    std::string eq = "SIN(X)^2";
+    ASTNode* ast = stringtoAST(eq);
+    std::cout << eq << " {X = 2} = " << evaluateAtX(ast, 2) << std::endl;
+    std::cout << eq << " {X = 3} = " << evaluateAtX(ast, 3) << std::endl;
+
     std::string inputs2[] {
         "1+2+3+(6/4)*4 - 2^X"
     };
