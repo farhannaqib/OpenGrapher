@@ -17,10 +17,13 @@ class Grapher {
         // and the shader program
         bool init();
 
-        void run();
+        // runs the grapehr for a given input
+        void run(std::string input);
 
     private:
         GLFWwindow* window;
         unsigned int shaderProgram;
         unsigned int VAO, VBO;
+        
+        void createShaderProgram();
 };

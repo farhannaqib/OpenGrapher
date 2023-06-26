@@ -83,6 +83,12 @@ bool Grapher::init() {
         return false;
     }
 
+    createShaderProgram();
+
+    return (bool) shaderProgram;
+}
+
+void Grapher::createShaderProgram() {
     // build shader program
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -119,17 +125,12 @@ bool Grapher::init() {
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-
-    if (!success) return false;
-    return true;
 }
 
-void Grapher::run() {
-
-    std::string input = "COS(X)";
+void Grapher::run(std::string input) {
     ASTNode* tree = stringtoAST(input);
 
-    const int size = 100;
+    const int size = 1440;
     float range = 10;
     float* x = new float[size];
     float* y = new float[size];
@@ -145,7 +146,6 @@ void Grapher::run() {
         vertices[i*3] = 2.0f*x[i]/range;
         vertices[i*3+1] = 2.0f*y[i]/rangey;
         vertices[i*3+2] = 0.0f;
-        std::cout << vertices[i*3] << " " << vertices[i*3+1] << std::endl;
     }
 
     glGenBuffers(1, &VBO);

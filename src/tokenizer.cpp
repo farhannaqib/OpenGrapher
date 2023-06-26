@@ -30,6 +30,7 @@ Token readToken(std::string& input) {
         }
     }
 
+    // account for decimal numbers
     std::string t = "";
     bool noDec = true;
     while(isdigit(input.front()) || (noDec && input.front() == '.')) {

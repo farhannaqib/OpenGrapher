@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+#include <unistd.h>
+
 #include "tokenizer.h"
 #include "ast.h"
 #include "solver.h"
@@ -43,7 +45,8 @@ int main() {
 
     Grapher grapher = Grapher();
     grapher.init();
-    grapher.run();
+    grapher.run("SIN(X)^2");
+    grapher.run("X^2");
 
     return 0;
 }
