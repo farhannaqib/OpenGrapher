@@ -1,3 +1,5 @@
+#if !defined(TEST)
+
 #ifdef __APPLE__
 // Defined before OpenGL and GLUT includes to avoid deprecation messages
 #define GL_SILENCE_DEPRECATION
@@ -67,6 +69,7 @@ bool Grapher::init() {
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     // create window and set context
     window = glfwCreateWindow(width, height, windowName, NULL, NULL);
@@ -82,6 +85,8 @@ bool Grapher::init() {
         std::cerr << "ERROR: can't load GLAD" << std::endl;
         return false;
     }
+
+    glEnable(GL_MULTISAMPLE); // anti-aliasing for steep lines
 
     createShaderProgram();
 
@@ -179,3 +184,5 @@ void Grapher::run(std::string input) {
         glfwPollEvents();
     }
 }
+
+#endif

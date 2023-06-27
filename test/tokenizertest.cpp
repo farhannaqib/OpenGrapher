@@ -145,12 +145,45 @@ bool testReadFunctions() {
     return true;
 }
 
+bool testReadNegatives() {
+    std::string input = "1+-2";
+    std::queue<Token> tokens = readString(input);
+    IS_EQUAL(tokens.size(), 3);
+    IS_EQUAL(tokens.front(), NumToken(1));
+    tokens.pop();
+    IS_EQUAL(tokens.front(), Token(TokenType::SUB));
+    tokens.pop();
+    IS_EQUAL(tokens.front(), NumToken(2));
+    input = "COS(-2)";
+    tokens = readString(input);
+    IS_EQUAL(tokens.size(), 4);
+    IS_EQUAL(tokens.front(), Token(TokenType::COS));
+    tokens.pop();
+    tokens.pop();
+    IS_EQUAL(tokens.front(), NumToken(-2));
+    return true;
+}
+
+bool testVariableMultiplication() {
+    std::string input = "2X";
+    std::queue<Token> tokens = readString(input);
+    IS_EQUAL(tokens.size(), 3);
+    IS_EQUAL(tokens.front(), NumToken(2));
+    tokens.pop();
+    IS_EQUAL(tokens.front(), Token(TokenType::MUL));
+    tokens.pop();
+    IS_EQUAL(tokens.front(), Token(TokenType::VAR));
+    return true;
+}
+
 bool testReadString() {
     IS_TRUE(testReadBasicString());
     IS_TRUE(testRemovingTokensFromString());
     IS_TRUE(testNegatingNumberInString());
     IS_TRUE(testAddingTokensToString());
     IS_TRUE(testReadFunctions());
+    IS_TRUE(testReadNegatives());
+    IS_TRUE(testVariableMultiplication());
     return true;
 }
 

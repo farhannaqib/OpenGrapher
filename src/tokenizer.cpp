@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <queue>
+#include <algorithm>
 
 #include "tokenizer.h"
 
@@ -59,10 +60,17 @@ void updateAddOp(Token &first, Token second) {
 
 std::queue<Token> readString(std::string input) {
     std::queue<Token> q;
+    std::transform(input.begin(), input.end(), input.begin(), ::toupper);
 
     while (!input.empty()) {
         // read token
         Token t = readToken(input);
+
+        if (t.type == TokenType::VAR && (q.size() != 0 && 
+        q.back().type == TokenType::NUM)) {
+            Token mulToken = Token(TokenType::MUL);
+            q.push(mulToken);
+        }
 
         // deals with [+-] [+-]
         if ((int)t.type < 2 && (q.size() != 0 
@@ -71,7 +79,7 @@ std::queue<Token> readString(std::string input) {
             continue; // consumes second token
         }
 
-        // deals with ![(Xn_] [+-]
+        // deals with adding negatives to operations
         if ((int) t.type < 2 && (q.size()==0 || q.back().type == TokenType::LB 
         || q.back().type == TokenType::MUL || q.back().type == TokenType::DIV 
         || q.back().type == TokenType::POW)) {
