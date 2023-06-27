@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <string>
+#include <math.h>
 
 #include "tokenizer.h"
 #include "ast.h"
@@ -142,7 +143,11 @@ void Grapher::run(std::string input) {
     float* y = new float[size];
     for (int i = 0; i < size; i++) {
         x[i] = (float)i / (float)size * range - range / 2.0f;
-        y[i] = (float) evaluateAtX(tree, x[i]);
+        try {
+            y[i] = (float) evaluateAtX(tree, x[i]);
+        } catch (std::domain_error& e) {
+            y[i] = MAXFLOAT; // out of bounds, as long as range is small
+        }
     }
 
     float rangey = 6;

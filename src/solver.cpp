@@ -74,7 +74,7 @@ void simplify(ASTNode* tree) {
 
         switch(tree->token.type) {
             case (TokenType::LN):
-                if (child <= 0) throw math_errhandling;
+                if (child <= 0) throw std::domain_error("ln of negative number");
                 newData = log(child);
                 break;
             case (TokenType::SIN):
@@ -84,23 +84,23 @@ void simplify(ASTNode* tree) {
                 newData = cos(child);
                 break;
             case (TokenType::TAN):
-                if (cos(child) == 0) throw math_errhandling;
+                if (cos(child) == 0) throw std::domain_error("tan of pi/2");
                 newData = tan(child);
                 break;
             case (TokenType::CSC):
-                if (sin(child) == 0) throw math_errhandling;
+                if (sin(child) == 0) throw std::domain_error("csc of 0");
                 newData = 1.0/sin(child);
                 break;
             case (TokenType::SEC):
-                if (cos(child) == 0) throw math_errhandling;
+                if (cos(child) == 0) throw std::domain_error("sec of pi/2");
                 newData = 1.0/cos(child);
                 break;
             case (TokenType::COT):
-                if (tan(child) == 0) throw math_errhandling;
+                if (tan(child) == 0) throw std::domain_error("cot of 0");
                 newData = 1.0/tan(child);
                 break;
             case (TokenType::SQRT):
-                if (child < 0) throw math_errhandling;
+                if (child < 0) throw std::domain_error("sqrt of negative number");
                 newData = sqrt(child);
                 break;
             case (TokenType::ABS):
@@ -136,14 +136,14 @@ void simplify(ASTNode* tree) {
                 newData = left*right;
                 break;
             case (TokenType::DIV):
-                if (right == 0) throw math_errhandling;
+                if (right == 0) throw std::domain_error("division by 0");
                 newData = left/right;
                 break;
             case (TokenType::POW):
                 newData = pow(left,right);
                 break;
             case (TokenType::MOD):
-                if (right <= 0) throw math_errhandling;
+                if (right <= 0) throw std::domain_error("mod by non-positive number");
                 newData = (int)left%(int)right;
                 break;
             case (TokenType::MAX):
@@ -153,7 +153,7 @@ void simplify(ASTNode* tree) {
                 newData = std::min(left,right);
                 break;
             case(TokenType::LOG):
-                if (left <= 0 || right <= 0) throw math_errhandling;
+                if (left <= 0 || right <= 0) throw std::domain_error("log of negative number");
                 newData = log(left)/log(right);
                 break;
             default:
