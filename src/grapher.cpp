@@ -72,7 +72,7 @@ bool Grapher::init() {
     glfwWindowHint(GLFW_SAMPLES, 4);
 
     // create window and set context
-    window = glfwCreateWindow(width, height, windowName, NULL, NULL);
+    window = glfwCreateWindow((int) width, (int) height, windowName, NULL, NULL);
     if (!window) {
         std::cerr << "ERROR: can't open window" << std::endl;
         glfwTerminate();

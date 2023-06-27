@@ -66,8 +66,9 @@ std::queue<Token> readString(std::string input) {
         // read token
         Token t = readToken(input);
 
-        if (t.type == TokenType::VAR && (q.size() != 0 && 
-        q.back().type == TokenType::NUM)) {
+        // TODO, fix this logic so t.type == NUM works too
+        if (t.type == TokenType::VAR && q.size() != 0 && (q.back().type == TokenType::NUM 
+        || q.back().type == TokenType::VAR || q.back().type == TokenType::RB)) {
             Token mulToken = Token(TokenType::MUL);
             q.push(mulToken);
         }
