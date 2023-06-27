@@ -17,11 +17,12 @@
 
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
+    "layout (location = 1) in vec4 aColor;\n"
     "out vec4 vertexColor;\n"
     "void main()\n"
     "{\n"
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "   vertexColor = vec4(0.6902, 0.8784, 0.902, 1.0);\n"
+    "   vertexColor = aColor;\n"
     "}\0";
 
 const char *fragmentShaderSource = "#version 330 core\n"
@@ -146,11 +147,18 @@ void Grapher::run(std::string input) {
 
     float rangey = 6;
     // generate vertices
-    float vertices[size*3];
+    float vertices[(size+4)*3];
+    float gridVertices[12] = {
+        -1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        0.0f, -1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f
+    };
+    for (int i = 0; i < 12; i++) vertices[i] = gridVertices[i];
     for (int i = 0; i < size; i++) {
-        vertices[i*3] = 2.0f*x[i]/range;
-        vertices[i*3+1] = 2.0f*y[i]/rangey;
-        vertices[i*3+2] = 0.0f;
+        vertices[(i+4)*3] = 2.0f*x[i]/range;
+        vertices[(i+4)*3+1] = 2.0f*y[i]/rangey;
+        vertices[(i+4)*3+2] = 0.0f;
     }
 
     glGenBuffers(1, &VBO);
@@ -175,10 +183,15 @@ void Grapher::run(std::string input) {
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
 
+        glVertexAttrib4f(1, 1.0f, 1.0f, 1.0f, 1.0f);
+        glDrawArrays(GL_LINES, 0, 4);
+
+        glVertexAttrib4f(1, 0.6902f, 0.8784f, 0.902f, 1.0f);
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_BLEND);
         glDepthMask(GL_FALSE);
-        glDrawArrays(GL_LINE_STRIP, 0, size);
+        glDrawArrays(GL_LINE_STRIP, 4, size);
+
 
         glfwSwapBuffers(window);
         glfwPollEvents();
