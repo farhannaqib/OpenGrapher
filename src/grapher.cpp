@@ -137,12 +137,12 @@ void Grapher::createShaderProgram() {
 void Grapher::run(std::string input) {
     ASTNode* tree = stringtoAST(input);
 
-    const int size = 1440;
+    const int size = 1440+1;
     float range = 10;
-    float* x = new float[size];
-    float* y = new float[size];
+    float x[size];
+    float y[size];
     for (int i = 0; i < size; i++) {
-        x[i] = (float)i / (float)size * range - range / 2.0f;
+        x[i] = (float)i / (float)(size-1) * range - range / 2.0f;
         try {
             y[i] = (float) evaluateAtX(tree, x[i]);
         } catch (std::domain_error& e) {
