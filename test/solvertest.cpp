@@ -19,6 +19,8 @@ bool testCanBeSimplified() {
     IS_TRUE(canBeSimplified(ast));
     ast = stringtoAST("1+SIN(X)");
     IS_TRUE(canBeSimplified(ast));
+    ast = stringtoAST("1*SIN(X)");
+    IS_TRUE(canBeSimplified(ast));
     ast = stringtoAST("1+SIN(X+2");
     IS_FALSE(canBeSimplified(ast));
     ast = stringtoAST("1+SIN(S+2)");
@@ -69,7 +71,7 @@ bool testParentheticalSimplify() {
 }
 
 bool testFunctionSimplify() {
-    std::string input = "SIN(PI)";
+    std::string input = "5*SIN(PI)";
     ASTNode* ast = stringtoAST(input);
     simplify(ast);
     IS_EQUAL(ast->token, NumToken(0));

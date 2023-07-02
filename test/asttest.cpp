@@ -69,6 +69,35 @@ bool testFunctionParenthesestoAST() {
     return true;
 }
 
+bool testOperationsWithFunctionstoAST() {
+    std::string input = "1+SIN(2)";
+    ASTNode* ast = stringtoAST(input);
+    IS_EQUAL(ast->token, Token(TokenType::ADD));
+    IS_EQUAL(ast->leftChild->token, NumToken(1));
+    IS_EQUAL(*ast->rightChild, *stringtoAST("SIN(2)"));
+    ast = stringtoAST("SIN(1)+2");
+    IS_EQUAL(ast->token, Token(TokenType::ADD));
+    IS_EQUAL(*ast->leftChild, *stringtoAST("SIN(1)"));
+    IS_EQUAL(ast->rightChild->token, NumToken(2));
+    ast = stringtoAST("SIN(1)+SIN(2)");
+    IS_EQUAL(ast->token, Token(TokenType::ADD));
+    IS_EQUAL(*ast->leftChild, *stringtoAST("SIN(1)"));
+    IS_EQUAL(*ast->rightChild, *stringtoAST("SIN(2)"));
+    ast = stringtoAST("SIN(1)*2");
+    IS_EQUAL(ast->token, Token(TokenType::MUL));
+    IS_EQUAL(*ast->leftChild, *stringtoAST("SIN(1)"));
+    IS_EQUAL(ast->rightChild->token, NumToken(2));
+    ast = stringtoAST("2*SIN(1)");
+    IS_EQUAL(ast->token, Token(TokenType::MUL));
+    IS_EQUAL(ast->leftChild->token, NumToken(2));
+    IS_EQUAL(*ast->rightChild, *stringtoAST("SIN(1)"));
+    ast = stringtoAST("SIN(1)*SIN(2)");
+    IS_EQUAL(ast->token, Token(TokenType::MUL));
+    IS_EQUAL(*ast->leftChild, *stringtoAST("SIN(1)"));
+    IS_EQUAL(*ast->rightChild, *stringtoAST("SIN(2)"));
+    return true;
+}
+
 bool testStringtoAST() {
     IS_TRUE(testChartoAST());
     IS_TRUE(testSimpleStringtoAST());
@@ -76,6 +105,7 @@ bool testStringtoAST() {
     IS_TRUE(testFunctiontoAST());
     IS_TRUE(testParentheticalStringtoAST());
     IS_TRUE(testFunctionParenthesestoAST());
+    // IS_TRUE(testOperationsWithFunctionstoAST());
     return true;
 }
 
@@ -99,9 +129,27 @@ bool testFunctionASTtoString() {
     return true;
 }
 
+bool testBasicOperationsASTtoString() {
+    std::string inputs[] = {"1+2", "1-2", "1*2", "1/2", "1^2"};
+    for (std::string input : inputs) {
+        IS_EQUAL(ASTtoString(stringtoAST(input)), input);
+    }
+    return true;
+}
+
+bool testBasicOperationsWithFunctionsASTtoString() {
+    std::string inputs[] = {"2+SIN(1)", "SIN(1)-2", "2*SIN(1)", "SIN(1)/2", "SIN(1)^2"};
+    for (std::string input : inputs) {
+        IS_EQUAL(ASTtoString(stringtoAST(input)), input);
+    }
+    return true;
+}
+
 bool testASTtoString() {
     IS_TRUE(testBasicASTtoString());
     IS_TRUE(testFunctionASTtoString());
+    IS_TRUE(testBasicOperationsASTtoString());
+    // IS_TRUE(testBasicOperationsWithFunctionsASTtoString());
     return true;
 }
 

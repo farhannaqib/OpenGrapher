@@ -10,9 +10,7 @@
 void addNode(std::stack<ASTNode*> &nodestack, Token token) {
     ASTNode* newNode = new ASTNode();
     int size = nodestack.size();
-    if (size >= 0) {
-        newNode->token = token;
-    }
+    newNode->token = token;
     if (size >= 1) {
         newNode->leftChild = nodestack.top();
         nodestack.pop();
