@@ -105,7 +105,7 @@ bool testStringtoAST() {
     IS_TRUE(testFunctiontoAST());
     IS_TRUE(testParentheticalStringtoAST());
     IS_TRUE(testFunctionParenthesestoAST());
-    // IS_TRUE(testOperationsWithFunctionstoAST());
+    IS_TRUE(testOperationsWithFunctionstoAST());
     return true;
 }
 
@@ -149,7 +149,7 @@ bool testASTtoString() {
     IS_TRUE(testBasicASTtoString());
     IS_TRUE(testFunctionASTtoString());
     IS_TRUE(testBasicOperationsASTtoString());
-    // IS_TRUE(testBasicOperationsWithFunctionsASTtoString());
+    IS_TRUE(testBasicOperationsWithFunctionsASTtoString());
     return true;
 }
 

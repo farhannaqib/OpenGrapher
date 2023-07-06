@@ -8,6 +8,7 @@
 int main() {
     IS_TRUE(tokenizerTests());
     IS_TRUE(astTests());
+    IS_TRUE(solverTests());
     return 0;
 }
 

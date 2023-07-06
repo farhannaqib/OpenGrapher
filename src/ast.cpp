@@ -5,6 +5,8 @@
 #include "tokenizer.h"
 #include "ast.h"
 
+#include <iostream>
+
 // helper method that adds node by removing 
 // from the nodestack when it can
 void addNode(std::stack<ASTNode*> &nodestack, Token token) {
@@ -14,11 +16,11 @@ void addNode(std::stack<ASTNode*> &nodestack, Token token) {
     if (size >= 1) {
         newNode->leftChild = nodestack.top();
         nodestack.pop();
-    }
-    if (size >= 2) {
-        newNode->rightChild = newNode->leftChild;
-        newNode->leftChild = nodestack.top();
-        nodestack.pop();
+        if ((int) token.type < 7) {
+            newNode->rightChild = newNode->leftChild;
+            newNode->leftChild = nodestack.top();
+            nodestack.pop();
+        }
     }
     nodestack.push(newNode);
 };
@@ -43,11 +45,16 @@ ASTNode* stringtoAST(std::string input) {
         }
         else if (token.type == TokenType::LB) opstack.push(token);
         else if (token.type == TokenType::RB && !opstack.empty()) {
-            while (opstack.top().type != TokenType::LB) {
+            while (!opstack.empty() && opstack.top().type != TokenType::LB) {
                 addNode(nodestack, opstack.top());
                 opstack.pop();
             }
-            opstack.pop();
+            if (!opstack.empty()) opstack.pop();
+            else {
+                ASTNode* errorNode = new ASTNode();
+                errorNode->token = ErrorToken();
+                return errorNode;
+            }
             if (!opstack.empty() && (int)opstack.top().type > 8 &&
             (int)opstack.top().type < 23) {
                 addNode(nodestack, opstack.top());
